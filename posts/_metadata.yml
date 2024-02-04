@@ -1,8 +1,13 @@
-# options specified here will apply to all posts in this folder
+project:
+  type: website
 
-# freeze computational output
-# (see https://quarto.org/docs/projects/code-execution.html#freeze)
-freeze: true
-
-# Enable banner style title blocks
-title-block-banner: true
+website:
+  title: "Bryana's Blog"
+  navbar:
+    right:
+      - about.qmd
+      - icon: github
+        href: https://github.com
+format:
+  html:
+    theme: minty
