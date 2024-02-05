@@ -18,14 +18,14 @@
     "href": "posts/welcome/index.html",
     "title": "Welcome To My Blog!",
     "section": "",
-    "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+    "text": "My name is Bryana and I am in my last semester as an undergraduate majoring in Psychology and Statistics at St. Lawrence University. I will be going into a PhD program for Behavior Analysis after I graduate investigating addiction and addiction-like behavior particularly in vulnerable and sensitive populations. The past 3 years I have been fortunate to do animal model research evaluating the long-term effects of chronic early-life stress on impulsive-like behavior. This blog will revolve around these topic in order to increase awareness through beautiful and easily digestible data visualizations."
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Bryana’s Blog",
     "section": "",
-    "text": "Post With Code\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nJan 31, 2024\n\n\nBryana A.S. Thieret\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ntesting\n\n\n\n\n\n\n\n\n\n\n\n\nJan 31, 2024\n\n\nBryana A.S. Thieret\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog!\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nJan 31, 2024\n\n\nBryana A.S. Thieret\n\n\n\n\n\n\nNo matching items"
+    "text": "Welcome To My Blog!\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nFeb 4, 2024\n\n\nBryana A.S. Thieret\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
@@ -33,5 +33,19 @@
     "title": "About",
     "section": "",
     "text": "About this blog"
+  },
+  {
+    "objectID": "posts/welcome/index.html#dataset",
+    "href": "posts/welcome/index.html#dataset",
+    "title": "Welcome To My Blog!",
+    "section": "Dataset",
+    "text": "Dataset\nThe first data set we will be exploring is data scrapped from the CDC website “Prevalence of Adverse Childhood Experiences Among U.S. Adults — Behavioral Risk Factor Surveillance System, 2011–2020” and can be found here under Table 1. This data was collected from 2011 to 2020 and is one of the most complete surveys that has currently been done.\nThe information scraped from the website is the summary statistics by state and categorized by adverse childhood type. More specifically, the adverse childhood events categorized for were emotional abuse, physical abuse, sexual abuse, domestic violence in the household, substance use in the household, mental illness in the household, parental separation or divorce, and incarcerated household member. These are the 8 most commonly collected adverse childhood events. In addition, we also have the response rate by state and year which is an important measure to keep in mind when evaluating these statistics due to response bias."
+  },
+  {
+    "objectID": "posts/welcome/index.html#questions-of-interest",
+    "href": "posts/welcome/index.html#questions-of-interest",
+    "title": "Welcome To My Blog!",
+    "section": "Questions of Interest",
+    "text": "Questions of Interest\nWhen looking over this dataset, a few things I want to be the focus and in the front of our minds are,\n\nWithin each category of adverse childhood events, which states have the highest rate of prevalence and which states have the lowest rate of prevalence. Are there any states in particular that stand out compared to other (i.e., that have a much higher rate of an adverse childhood event or in the opposite direction).\nResponse rate is very important to keep in mind when comparing percentages of prevalence of these adverse childhood events because of response bias.\n\n\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.3     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.0\n✔ ggplot2   3.4.3     ✔ tibble    3.2.1\n✔ lubridate 1.9.3     ✔ tidyr     1.3.0\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors\n\nlibrary(rvest)\n\n\nAttaching package: 'rvest'\n\nThe following object is masked from 'package:readr':\n\n    guess_encoding\n\nlibrary(janitor)\n\n\nAttaching package: 'janitor'\n\nThe following objects are masked from 'package:stats':\n\n    chisq.test, fisher.test\n\nurl = \"https://www.cdc.gov/mmwr/volumes/72/wr/mm7226a2.htm\"\nh = read_html(url)\ntab = h |> html_nodes(\"table\")\naces = tab[[1]] |> html_table()\naces_full = aces |> row_to_names(1)\n\n\naces_full = aces_full |> rename(\"state\" = `Jurisdiction*`, \n                    \"year\" = `Survey year`,\n                    \"response_rate\" = `Survey response rate, %`,\n                    \"n_responses\" = `Total no., unweighted`,\n                    \"Emotional\" = `Emotional†`,\n                    \"Physical\" = `Physical`,\n                    \"Sexual\" = `Sexual§`,\n                    \"DV\" = `Witnessed intimate partner violence`,\n                    \"Substance_Use_HH\" = `Household substance use¶`,\n                    \"Mental_Illness_HH\" = `Household mental illness`,\n                    \"SeparationDivorce\" = `Parental separation or divorce†`,\n                    \"Incarcerated_HM\" = `Incarcerated household member`)\n\nace_new = aces_full |> separate(col = Emotional, into = c(\"Emotional\", \"Emotional_CI\"), sep = c(\" \")) |>\n  separate(col = Physical, into = c(\"Physical\", \"Physical_CI\"), sep = \" \") |>\n  separate(col = Sexual, into = c(\"Sexual\", \"Sexual_CI\"), sep = \" \") |>\n  separate(col = DV, into = c(\"DV\", \"DV_CI\"), sep = \" \") |>\n  separate(col = Substance_Use_HH, into = c(\"Substance_Use_HH\", \"Substance_Use_HH_CI\"), sep = \" \") |>\n  separate(col = Mental_Illness_HH, into = c(\"Mental_Illness_HH\", \"Mental_Illness_HH_CI\"), sep = \" \") |>\n  separate(col = SeparationDivorce, into = c(\"SeparationDivorce\", \"SeparationDivorce_CI\"), sep = \" \") |>\n  separate(col = Incarcerated_HM, into = c(\"Incarcerated_HM\", \"Incarcerated_HM_CI\"), sep = \" \")\n\nWarning: Expected 2 pieces. Missing pieces filled with `NA` in 2 rows [7, 31]."
   }
 ]

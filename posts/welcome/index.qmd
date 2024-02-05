@@ -1,8 +1,71 @@
 ---
 title: "Welcome To My Blog!"
 author: "Bryana A.S. Thieret"
-date: "2024-01-31"
+date: "2024-02-04"
 categories: [news]
 ---
+
+My name is Bryana and I am in my last semester as an undergraduate majoring in Psychology and Statistics at St. Lawrence University. I will be going into a PhD program for Behavior Analysis after I graduate investigating addiction and addiction-like behavior particularly in vulnerable and sensitive populations. The past 3 years I have been fortunate to do animal model research evaluating the long-term effects of chronic early-life stress on impulsive-like behavior. This blog will revolve around these topic in order to increase awareness through beautiful and easily digestible data visualizations.  
+
+
+# Introduction  
+
+
+## Dataset  
+The first data set we will be exploring is data scrapped from the CDC website "Prevalence of Adverse Childhood Experiences Among U.S. Adults — Behavioral Risk Factor Surveillance System, 2011–2020" and can be found [here](https://www.cdc.gov/mmwr/volumes/72/wr/mm7226a2.htm) under Table 1. This data was collected from 2011 to 2020 and is one of the most complete surveys that has currently been done.  
+
+The information scraped from the website is the summary statistics by state and categorized by adverse childhood type. More specifically, the adverse childhood events categorized for were emotional abuse, physical abuse, sexual abuse, domestic violence in the household, substance use in the household, mental illness in the household, parental separation or divorce, and incarcerated household member. These are the 8 most commonly collected adverse childhood events. In addition, we also have the response rate by state and year which is an important measure to keep in mind when evaluating these statistics due to response bias.  
+
+## Questions of Interest  
+When looking over this dataset, a few things I want to be the focus and in the front of our minds are,  
+
+1. Within each category of adverse childhood events, which states have the highest rate of prevalence and which states have the lowest rate of prevalence. Are there any states in particular that stand out compared to other (i.e., that have a much higher rate of an adverse childhood event or in the opposite direction).  
+
+2. Response rate is very important to keep in mind when comparing percentages of prevalence of these adverse childhood events because of response bias.  
+
+
+```{r}
+library(tidyverse)
+library(rvest)
+library(janitor)
+
+
+url = "https://www.cdc.gov/mmwr/volumes/72/wr/mm7226a2.htm"
+h = read_html(url)
+tab = h |> html_nodes("table")
+aces = tab[[1]] |> html_table()
+aces_full = aces |> row_to_names(1)
+
+
+aces_full = aces_full |> rename("state" = `Jurisdiction*`, 
+                    "year" = `Survey year`,
+                    "response_rate" = `Survey response rate, %`,
+                    "n_responses" = `Total no., unweighted`,
+                    "Emotional" = `Emotional†`,
+                    "Physical" = `Physical`,
+                    "Sexual" = `Sexual§`,
+                    "DV" = `Witnessed intimate partner violence`,
+                    "Substance_Use_HH" = `Household substance use¶`,
+                    "Mental_Illness_HH" = `Household mental illness`,
+                    "SeparationDivorce" = `Parental separation or divorce†`,
+                    "Incarcerated_HM" = `Incarcerated household member`)
+
+ace_new = aces_full |> separate(col = Emotional, into = c("Emotional", "Emotional_CI"), sep = c(" ")) |>
+  separate(col = Physical, into = c("Physical", "Physical_CI"), sep = " ") |>
+  separate(col = Sexual, into = c("Sexual", "Sexual_CI"), sep = " ") |>
+  separate(col = DV, into = c("DV", "DV_CI"), sep = " ") |>
+  separate(col = Substance_Use_HH, into = c("Substance_Use_HH", "Substance_Use_HH_CI"), sep = " ") |>
+  separate(col = Mental_Illness_HH, into = c("Mental_Illness_HH", "Mental_Illness_HH_CI"), sep = " ") |>
+  separate(col = SeparationDivorce, into = c("SeparationDivorce", "SeparationDivorce_CI"), sep = " ") |>
+  separate(col = Incarcerated_HM, into = c("Incarcerated_HM", "Incarcerated_HM_CI"), sep = " ")
+
+```
+
+
+
+
+
+
+
 
 
