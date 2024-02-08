@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -19,72 +19,9 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -120,15 +57,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -139,38 +79,40 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <span class="navbar-title">DV334Blog</span>
     </a>
   </div>
+            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../about.html">
+    <a class="nav-link" href="../../about.html" rel="" target="">
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/bryanathieret"><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/bryanathieret" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com"><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com" rel="" target=""><i class="bi bi-twitter" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
+            <div class="quarto-navbar-tools">
+</div>
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-page" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -204,88 +146,207 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
+<section id="about-bryana" class="level3">
+<h3 class="anchored" data-anchor-id="about-bryana">About Bryana</h3>
 <p>My name is Bryana and I am in my last semester as an undergraduate majoring in Psychology and Statistics at St.&nbsp;Lawrence University. I will be going into a PhD program for Behavior Analysis after I graduate investigating addiction and addiction-like behavior particularly in vulnerable and sensitive populations. The past 3 years I have been fortunate to do animal model research evaluating the long-term effects of chronic early-life stress on impulsive-like behavior. This blog will revolve around these topic in order to increase awareness through beautiful and easily digestible data visualizations.</p>
+<p><em>———————————————————————————————————————–</em></p>
+</section>
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
 <section id="dataset" class="level2">
 <h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
-<p>The first data set we will be exploring is data scrapped from the CDC website “Prevalence of Adverse Childhood Experiences Among U.S. Adults — Behavioral Risk Factor Surveillance System, 2011–2020” and can be found <a href="https://www.cdc.gov/mmwr/volumes/72/wr/mm7226a2.htm">here</a> under Table 1. This data was collected from 2011 to 2020 and is one of the most complete surveys that has currently been done.</p>
-<p>The information scraped from the website is the summary statistics by state and categorized by adverse childhood type. More specifically, the adverse childhood events categorized for were emotional abuse, physical abuse, sexual abuse, domestic violence in the household, substance use in the household, mental illness in the household, parental separation or divorce, and incarcerated household member. These are the 8 most commonly collected adverse childhood events. In addition, we also have the response rate by state and year which is an important measure to keep in mind when evaluating these statistics due to response bias.</p>
+<p>The first data set we will be exploring is data scrapped from a CDC website article named, “Prevalence of Adverse Childhood Experiences Among U.S. Adults — Behavioral Risk Factor Surveillance System, 2011–2020” and can be found <a href="https://www.cdc.gov/mmwr/volumes/72/wr/mm7226a2.htm">here</a> under Table 1. This data was collected from 2011 to 2020 and is one of the most complete surveys that has currently been done in the United States on adverse childhood event prevalence.</p>
+<p>The information scraped from the website is the summary statistics by state and categorized by adverse childhood type. More specifically, the adverse childhood events were categorized by emotional abuse, physical abuse, sexual abuse, domestic violence in the household, substance use in the household, mental illness in the household, parental separation or divorce, and incarcerated household member. Generally speaking, these are the 8 most commonly collected adverse childhood events. In addition, we also have the response rate by state and year which is an important measure to keep in mind when evaluating the data due to response bias.</p>
+<p><strong>IMPORTANT DISTINCTION:</strong> Adverse childhood experiences that are emotional abuse, physical abuse, and sexual abuse are events that happen directly to the child. In comparison, domestic violence in the household, substance use in the household, mental illness in the household, parental separation or divorce, and incarcerated household member are adverse childhood experiences where the child is present (i.e., a bystander). These events create instability and uncertainty for a child resulting in a chronic stress environment and have been shown repeatedly to increase risk for a multitude of illnesses and risky/maladaptive behaviors.</p>
+<section id="definitions" class="level3">
+<h3 class="anchored" data-anchor-id="definitions">Definitions</h3>
+<ul>
+<li>This dataset has many abbreviations and could be interpreted wrong without the following operational definitions from the study expressed in questions asked (These were not the only questions asked to determine if the person experienced a specific adverse childhood event, but I hope this gives a better idea on how this was defined).
+<ul>
+<li>Emotional abuse (<code>Emotional</code>):
+<ol type="1">
+<li>“How often did a parent or adult in your home ever swear at you, insult you, or put you down?” (answers: never vs.&nbsp;at least once)<br>
+</li>
+</ol></li>
+<li>Physical abuse (<code>Physical</code>):
+<ol type="1">
+<li>“How often did your parents or adults in your home ever hit, beat, kick, or physically hurt you in any way? Do not include spanking” (answers: never vs.&nbsp;at least once)<br>
+</li>
+</ol></li>
+<li>Sexual abuse (<code>Sexual</code>):
+<ol type="1">
+<li>“How often did anyone at least 5 years older than you or an adult, ever try to make you touch them sexually?” (answers: never vs.&nbsp;at least once)<br>
+</li>
+</ol></li>
+<li>Separated/Divorced (<code>SeparatedDivorced</code>):
+<ol type="1">
+<li>“Were your parents separated or divorced?” (answers: no vs.&nbsp;yes)<br>
+</li>
+</ol></li>
+<li>Mental illness in the household (<code>Mental_Illness_HH</code>):
+<ol type="1">
+<li>“Did you live with anyone who was depressed, mentally ill or suicidal?” (answers: no vs.&nbsp;yes)<br>
+</li>
+</ol></li>
+<li>Substance Use in household (<code>Substance_Use_HH</code>):
+<ol type="1">
+<li>“Did you live with anyone who used illegal street drugs or who abused prescription medications?” (answers: no vs.&nbsp;yes)<br>
+</li>
+</ol></li>
+<li>Domestic violence in household (<code>DV</code>):
+<ol type="1">
+<li>“How often did your parents or adults in your home ever slap, hit, kick, punch or beat each other up?” (answers: never vs.&nbsp;at least once)<br>
+</li>
+</ol></li>
+<li>Incarcerated household member (<code>Incarcerated_HM</code>):
+<ol type="1">
+<li>“Did you live with anyone who served time or was sentenced to serve time in prison, jail, or other correctional facility?” (answers: no vs.&nbsp;yes)</li>
+</ol></li>
+</ul></li>
+</ul>
+</section>
 </section>
 <section id="questions-of-interest" class="level2">
 <h2 class="anchored" data-anchor-id="questions-of-interest">Questions of Interest</h2>
 <p>When looking over this dataset, a few things I want to be the focus and in the front of our minds are,</p>
 <ol type="1">
-<li><p>Within each category of adverse childhood events, which states have the highest rate of prevalence and which states have the lowest rate of prevalence. Are there any states in particular that stand out compared to other (i.e., that have a much higher rate of an adverse childhood event or in the opposite direction).</p></li>
 <li><p>Response rate is very important to keep in mind when comparing percentages of prevalence of these adverse childhood events because of response bias.</p></li>
+<li><p>Which adverse childhood events are more common overall and which ones are less common?</p></li>
+<li><p>Within each category of adverse childhood events, which states have the highest rate of prevalence.</p></li>
 </ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.3     ✔ readr     2.1.4
-✔ forcats   1.0.0     ✔ stringr   1.5.0
-✔ ggplot2   3.4.3     ✔ tibble    3.2.1
-✔ lubridate 1.9.3     ✔ tidyr     1.3.0
-✔ purrr     1.0.2     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'rvest'
-
-The following object is masked from 'package:readr':
-
-    guess_encoding</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'janitor'
-
-The following objects are masked from 'package:stats':
-
-    chisq.test, fisher.test</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">=</span> <span class="st">"https://www.cdc.gov/mmwr/volumes/72/wr/mm7226a2.htm"</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>h <span class="ot">=</span> <span class="fu">read_html</span>(url)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">=</span> h <span class="sc">|&gt;</span> <span class="fu">html_nodes</span>(<span class="st">"table"</span>)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>aces <span class="ot">=</span> tab[[<span class="dv">1</span>]] <span class="sc">|&gt;</span> <span class="fu">html_table</span>()</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>aces_full <span class="ot">=</span> aces <span class="sc">|&gt;</span> <span class="fu">row_to_names</span>(<span class="dv">1</span>)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>aces_full <span class="ot">=</span> aces_full <span class="sc">|&gt;</span> <span class="fu">rename</span>(<span class="st">"state"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Jurisdiction*</span><span class="st">`</span>, </span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"year"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Survey year</span><span class="st">`</span>,</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"response_rate"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Survey response rate, %</span><span class="st">`</span>,</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"n_responses"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Total no., unweighted</span><span class="st">`</span>,</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Emotional"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Emotional†</span><span class="st">`</span>,</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Physical"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Physical</span><span class="st">`</span>,</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Sexual"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Sexual§</span><span class="st">`</span>,</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"DV"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Witnessed intimate partner violence</span><span class="st">`</span>,</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Substance_Use_HH"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Household substance use¶</span><span class="st">`</span>,</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Mental_Illness_HH"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Household mental illness</span><span class="st">`</span>,</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"SeparationDivorce"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Parental separation or divorce†</span><span class="st">`</span>,</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"Incarcerated_HM"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Incarcerated household member</span><span class="st">`</span>)</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>ace_new <span class="ot">=</span> aces_full <span class="sc">|&gt;</span> <span class="fu">separate</span>(<span class="at">col =</span> Emotional, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"Emotional"</span>, <span class="st">"Emotional_CI"</span>), <span class="at">sep =</span> <span class="fu">c</span>(<span class="st">" "</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(<span class="at">col =</span> Physical, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"Physical"</span>, <span class="st">"Physical_CI"</span>), <span class="at">sep =</span> <span class="st">" "</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(<span class="at">col =</span> Sexual, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"Sexual"</span>, <span class="st">"Sexual_CI"</span>), <span class="at">sep =</span> <span class="st">" "</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(<span class="at">col =</span> DV, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"DV"</span>, <span class="st">"DV_CI"</span>), <span class="at">sep =</span> <span class="st">" "</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(<span class="at">col =</span> Substance_Use_HH, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"Substance_Use_HH"</span>, <span class="st">"Substance_Use_HH_CI"</span>), <span class="at">sep =</span> <span class="st">" "</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(<span class="at">col =</span> Mental_Illness_HH, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"Mental_Illness_HH"</span>, <span class="st">"Mental_Illness_HH_CI"</span>), <span class="at">sep =</span> <span class="st">" "</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(<span class="at">col =</span> SeparationDivorce, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"SeparationDivorce"</span>, <span class="st">"SeparationDivorce_CI"</span>), <span class="at">sep =</span> <span class="st">" "</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(<span class="at">col =</span> Incarcerated_HM, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"Incarcerated_HM"</span>, <span class="st">"Incarcerated_HM_CI"</span>), <span class="at">sep =</span> <span class="st">" "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Expected 2 pieces. Missing pieces filled with `NA` in 2 rows [7, 31].</code></pre>
-</div>
-</div>
-
-
 </section>
+</section>
+<section id="exploratory-analysis" class="level1">
+<h1>Exploratory Analysis</h1>
+<section id="response-rate" class="level2">
+<h2 class="anchored" data-anchor-id="response-rate">Response Rate</h2>
+<ul>
+<li>A “good” response rate is about 95%, but because this is a very sensitive topic we see a much lower response rate. The reason why response rate is important to keep in mind is because you are more likely to have response bias in your data (i.e., those who are passionate or care about responding do respond and those who don’t care do not leaving the data biased). This is just something we should keep in mind as we look at the data because states with a response rate of 40% are going to have a different bias level compared to states with a response rate of 60%.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+</section>
+<section id="general-prevalence-of-aces-by-categorytype" class="level2">
+<h2 class="anchored" data-anchor-id="general-prevalence-of-aces-by-categorytype">General Prevalence of ACEs by Category/Type</h2>
+<section id="percentage-reported-by-state" class="level3">
+<h3 class="anchored" data-anchor-id="percentage-reported-by-state">Percentage Reported by State</h3>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="1152"></p>
+</div>
+</div>
+</section>
+<section id="proportion-reported-by-state" class="level3">
+<h3 class="anchored" data-anchor-id="proportion-reported-by-state">Proportion Reported by State</h3>
+<ul>
+<li>Using a proportion might be helpful in this case since we have different percentages of response rates by state.</li>
+</ul>
+<p>By state, <span class="math inline">\(X\)</span> being one of the 8 categories of reported adverse childhood events,<br>
+<span class="math display">\[X_{Proportion} = \frac{X\%}{(Emotional\% + Physical\% + SeparationDivorce\% + SubstanceUse\% + MentalIllness\% + DV\% + Sexual\% + Incarcerated\%)}\]</span></p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="1152"></p>
+</div>
+</div>
+</section>
+<section id="emotional-abuse" class="level3">
+<h3 class="anchored" data-anchor-id="emotional-abuse">Emotional Abuse</h3>
+<ul>
+<li>Emotional abuse was the most prevalent adverse childhood experience reported. On the emotional abuse prevalence map by state, we see a general pattern that emotional abuse is reported more on the west coast compared to the east coast.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+</section>
+<section id="separationdivorce" class="level3">
+<h3 class="anchored" data-anchor-id="separationdivorce">Separation/Divorce</h3>
+<ul>
+<li>On the separation or divorce prevalence map by state, we see a general trend of a higher concentration of separations and divorces in the southeast.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="substance-use-in-the-household" class="level2">
+<h2 class="anchored" data-anchor-id="substance-use-in-the-household">Substance Use in the Household</h2>
+<ul>
+<li>On prevalence of substance use in the household, there looks to be a general prevalence overall of 25%, but greater prevalence in the northwest (not exclusively).</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+<section id="physical-abuse" class="level3">
+<h3 class="anchored" data-anchor-id="physical-abuse">Physical Abuse</h3>
+<ul>
+<li>Prevalence of physical abuse shown through the map appears to be greater in the southwest.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+</section>
+<section id="mental-illness-in-household" class="level3">
+<h3 class="anchored" data-anchor-id="mental-illness-in-household">Mental Illness in Household</h3>
+<ul>
+<li>This map graph is interesting because it appears mental illness in the household is most prevalent in a much greater way in Utah compared to all other states.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+</section>
+<section id="domestic-violence-in-household" class="level3">
+<h3 class="anchored" data-anchor-id="domestic-violence-in-household">Domestic Violence in Household</h3>
+<ul>
+<li>Interestingly, in this map we see Nevada stand out as having a much greater percentage of domestic violence compared to all other states.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+</section>
+<section id="sexual-abuse" class="level3">
+<h3 class="anchored" data-anchor-id="sexual-abuse">Sexual Abuse</h3>
+<ul>
+<li>Oregon stands out as having a larger percentage of sexual abuse occur compared to all other states.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+</section>
+<section id="incarcerated-household-member" class="level3">
+<h3 class="anchored" data-anchor-id="incarcerated-household-member">Incarcerated Household Member</h3>
+<ul>
+<li>In the map, we see a trend of higher percentages of a household member being incarcerated in the southeast region. This generally makes sense because those states have a tendency to have a higher percentage of residences that are people of color, and due to systemic racism, those with a darker complexion are more likely to be incarcerated wrongfully or for petty crimes compared to white people.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="1440"></p>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="discussion-limitations" class="level1">
+<h1>Discussion &amp; Limitations</h1>
+<p>This exploratory analysis evaluated the prevalence of different adverse childhood events both generally in the US and by state.</p>
+
+
 </section>
 
 </main> <!-- /main -->
@@ -316,9 +377,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -383,6 +458,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
