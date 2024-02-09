@@ -20,7 +20,7 @@ _-------------------------------------------------------------------------------
 
 # Introduction   
 ## Dataset  
-The first data set we will be exploring is data scrapped from a CDC website article named, "Prevalence of Adverse Childhood Experiences Among U.S. Adults — Behavioral Risk Factor Surveillance System, 2011–2020" and can be found [here](https://www.cdc.gov/mmwr/volumes/72/wr/mm7226a2.htm) under Table 1. This data was collected from 2011 to 2020 and is one of the most complete surveys that has currently been done in the United States on adverse childhood event prevalence.   
+The first data set we will be exploring is data scrapped from a CDC website article named, "Prevalence of Adverse Childhood Experiences Among U.S. Adults — Behavioral Risk Factor Surveillance System, 2011–2020" and can be found [here](https://www.cdc.gov/mmwr/volumes/72/wr/mm7226a2.htm) in Table 1. This data was collected from 2011 to 2020 and is one of the most complete surveys that has currently been done in the United States on adverse childhood event prevalence.   
 
 The information scraped from the website is the summary statistics by state and categorized by adverse childhood type. More specifically, the adverse childhood events were categorized by emotional abuse, physical abuse, sexual abuse, domestic violence in the household, substance use in the household, mental illness in the household, parental separation or divorce, and incarcerated household member. Generally speaking, these are the 8 most commonly collected adverse childhood events. In addition, we also have the response rate by state and year which is an important measure to keep in mind when evaluating the data due to response bias.  
 
@@ -69,6 +69,7 @@ library(maps)
 library(ggbeeswarm)
 library(gridExtra)
 library(paletteer)
+library(knitr)
 
 
 url = "https://www.cdc.gov/mmwr/volumes/72/wr/mm7226a2.htm"
@@ -128,6 +129,8 @@ ace_state <- left_join(state_df, ace_subset, by = c("region" = "state"))
 ## Response Rate  
 
 * A "good" response rate is about 95%, but because this is a very sensitive topic we see a much lower response rate. The reason why response rate is important to keep in mind is because you are more likely to have response bias in your data (i.e., those who are passionate or care about responding do respond and those who don't care do not leaving the data biased). This is just something we should keep in mind as we look at the data because states with a response rate of 40% are going to have a different bias level compared to states with a response rate of 60%.  
+* This map shows that there was higher response rates from states in the middle of the country compared to the states on the west or east coast. Mississippi had by far the highest response rate compared to all other states.  
+
 
 ```{r output = FALSE}
 zeroa = ace_state |> ggplot(aes(x = long, y = lat, group = group)) +
@@ -195,7 +198,8 @@ ace_better |> ggplot(aes(x = Percentage, y = Category, col = Category)) +
     axis.text.y = element_text(color = "black", size = 16, family = "Avenir"),
     legend.position = "top", 
     legend.title = element_blank(),
-    legend.text = element_text(color = "black", size = 15, family = "Avenir")
+    legend.text = element_text(color = "black", size = 15, family = "Avenir"),
+    plot.caption = element_text(color = "black", size = 10, family = "Avenir")
   )
 ```
 
@@ -206,6 +210,11 @@ ace_better |> ggplot(aes(x = Percentage, y = Category, col = Category)) +
 
 By state, $X$ being one of the 8 categories of reported adverse childhood events,  
 $$X_{Proportion} = \frac{X\%}{(Emotional\% + Physical\% + SeparationDivorce\% + SubstanceUse\% + MentalIllness\% + DV\% + Sexual\% + Incarcerated\%)}$$  
+
+\ 
+\ 
+\ 
+\ 
 
 
 ```{r fig.width=12, fig.height=8}
@@ -231,7 +240,8 @@ ace1 |> ggplot(aes(x = proportion, y = Category, col = Category)) +
     axis.text.y = element_text(color = "black", size = 16, family = "Avenir"),
     legend.position = "top", 
     legend.title = element_blank(),
-    legend.text = element_text(color = "black", size = 15, family = "Avenir"))
+    legend.text = element_text(color = "black", size = 15, family = "Avenir"),
+    plot.caption = element_text(color = "black", size = 10, family = "Avenir"))
 
 ```
 
@@ -650,11 +660,49 @@ eightb = incarcerated_top |> ggplot(aes(x = state, y = Incarcerated_HM)) +
 grid.arrange(eighta, eightb, nrow = 1)
 ```
 
+### States Above 75th Percentile     
+
+Something I noticed when doing this is that many of the states above the 75th percentile for a specific adverse childhood event prevalence showed up multiple times. To evaluate this further I decided to do the graph below which shows all the states that were included in at least one 75th percentile dataset to evaluate exactly how many times specific states showed up in the 75th percentile across different adverse childhood events.   
+
+In a sense, it does make sense that if a state had shown up once in a 75th percentile datasets that they would most likely show up again because instability leads to more instability. This visual, in my opinion, shows a real problem occurring within certain states. 
+
+
+```{r fig.height=12, fig.width=15}
+bad0 = full_join(full_join(full_join(full_join(full_join(full_join(full_join(emotional_top, sexual_top), physical_top), dv_top), mental_top), substance_top), incarcerated_top), separation_top) |> pivot_longer(c(2:9), values_to = "Percent", names_to = "Category") |> mutate(not0 = if_else(Percent != 0, 1, 0)) |> select(-Percent)
+  
+bad = full_join(full_join(full_join(full_join(full_join(full_join(full_join(emotional_top, sexual_top), physical_top), dv_top), mental_top), substance_top), incarcerated_top), separation_top) |> pivot_longer(c(2:9), values_to = "Percent", names_to = "Category") |> mutate(not0 = if_else(Percent != 0, 1, 0)) |> filter(!is.na(not0)) |> group_by(state) |> summarise(sum = sum(not0)) |> mutate(state = fct_reorder(state, sum))
+
+
+bad2 = left_join(bad0, bad)
+bad2 = bad2 |> mutate(state = fct_reorder(state, sum))
+
+bad2 |> ggplot(aes(x = state, y = not0, fill = Category)) + 
+  geom_col(color = "black") +
+  coord_flip() +
+  scale_fill_manual(limits = c("Incarcerated_HM", "Sexual", "DV", "Mental_Illness_HH", "Physical", "Substance_Use_HH", "SeparationDivorce", "Emotional"), values = c("#ebac23", "#b80058", "#008cf9", "#006e00", "#00bbad", "#d163e6", "#ff9287", "#5954d6")) +
+  theme_classic() +
+  labs(y = "Number of Categories", caption = "Each point represents a state. HH = household. HM = household member. DV = domestic violence.") +
+  theme(
+    axis.title.y = element_blank(),
+    axis.title.x = element_text(color = "black", size = 20, family = "Avenir"),
+    title = element_text(color = "black", size = 12, family = "Avenir"),
+    axis.text.x = element_text(color = "black", size = 19, family = "Avenir"), 
+    axis.text.y = element_text(color = "black", size = 19, family = "Avenir"),
+    legend.title = element_blank(),
+    legend.text = element_text(color = "black", size = 14, family = "Avenir"),
+    legend.position = "top",
+    plot.caption = element_text(color = "black", size = 10, family = "Avenir")
+  )
+```
 
 
 
 # Discussion & Limitations  
 
-This exploratory analysis evaluated the prevalence of different adverse childhood events both generally in the US and by state. 
+This exploratory analysis evaluated the prevalence of different adverse childhood events both generally in the US and by state. Due to my extensive research in this area, I was not too surprised with the findings for prevalence overall, but was surprised when looking by state. It is always upsetting to look at this because the long-term effects of adverse childhood events are increased risk for chronic physical illness, debilitating mental illness, alcohol use disorder, substance use disorder, shorter lifespan, and much more, but in the US we only care about an issue when it is about to kill you and not prevent it to begin with.  
+
+There are a multitude of limitations to this exploratory analysis with the biggest being low response rate which we know leads to increase in response bias. In addition, this analysis was simply by state prevalence and did not include any demographics of the participants (Table 2 of the article). Due to this, I will put a precautionary warning here that acknowledges for everyone that there is ample evidence that those who experience the most adverse childhood events are those living in low-income urban areas which often consists of majority people of color (Maguire-Jack et al., 2021).  
+
+
 
 
