@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Bryana A.S. Thieret">
+<meta name="dcterms.date" content="2024-02-17">
+
+<title>Bryana’s Blog - Demographics for Those With Adverse Childhood Events</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">DV334Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/bryanathieret"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content column-page" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Demographics for Those With Adverse Childhood Events</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">news</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta column-page">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Bryana A.S. Thieret </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 17, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>This is a similar continuation from my first post, but this time rather than focusing on where adverse childhood events (ACEs) were most prevalent by state and type of adversity, I will be exploring the demographics of those experiencing ACEs in addition to breaking it down by adversity type.</p>
+<section id="dataset" class="level3">
+<h3 class="anchored" data-anchor-id="dataset">Dataset</h3>
+<p>The dataset of interest this time scrapped from a CDC website article named, “Prevalence of Adverse Childhood Experiences Among U.S. Adults — Behavioral Risk Factor Surveillance System, 2011–2020” and can be found <a href="https://www.cdc.gov/mmwr/volumes/72/wr/mm7226a2.htm">here</a> in Table 3. As mentioned in the first post, this data was collected from 2011 to 2020 and is the most complete surveys done in the United States evaluating prevalence of ACEs.</p>
+</section>
+<section id="definitions" class="level3">
+<h3 class="anchored" data-anchor-id="definitions">Definitions</h3>
+<section id="adverse-childhood-events" class="level4">
+<h4 class="anchored" data-anchor-id="adverse-childhood-events">Adverse Childhood Events</h4>
+<ul>
+<li>This dataset has many abbreviations and could be interpreted wrong without the following operational definitions from the study expressed in questions asked (These were not the only questions asked to determine if the person experienced a specific adverse childhood event, but I hope this gives a better idea on how this was defined).
+<ul>
+<li>Emotional abuse (<code>Emotional</code>):
+<ol type="1">
+<li>“How often did a parent or adult in your home ever swear at you, insult you, or put you down?” (answers: never vs.&nbsp;at least once)<br>
+</li>
+</ol></li>
+<li>Physical abuse (<code>Physical</code>):
+<ol type="1">
+<li>“How often did your parents or adults in your home ever hit, beat, kick, or physically hurt you in any way? Do not include spanking” (answers: never vs.&nbsp;at least once)<br>
+</li>
+</ol></li>
+<li>Sexual abuse (<code>Sexual</code>):
+<ol type="1">
+<li>“How often did anyone at least 5 years older than you or an adult, ever try to make you touch them sexually?” (answers: never vs.&nbsp;at least once)<br>
+</li>
+</ol></li>
+<li>Separated/Divorced (<code>SeparatedDivorced</code>):
+<ol type="1">
+<li>“Were your parents separated or divorced?” (answers: no vs.&nbsp;yes)<br>
+</li>
+</ol></li>
+<li>Mental illness in the household (<code>Mental_Illness_HH</code>):
+<ol type="1">
+<li>“Did you live with anyone who was depressed, mentally ill or suicidal?” (answers: no vs.&nbsp;yes)<br>
+</li>
+</ol></li>
+<li>Substance Use in household (<code>Substance_Use_HH</code>):
+<ol type="1">
+<li>“Did you live with anyone who used illegal street drugs or who abused prescription medications?” (answers: no vs.&nbsp;yes)<br>
+</li>
+</ol></li>
+<li>Domestic violence in household (<code>DV</code>):
+<ol type="1">
+<li>“How often did your parents or adults in your home ever slap, hit, kick, punch or beat each other up?” (answers: never vs.&nbsp;at least once)<br>
+</li>
+</ol></li>
+<li>Incarcerated household member (<code>Incarcerated_HM</code>):
+<ol type="1">
+<li>“Did you live with anyone who served time or was sentenced to serve time in prison, jail, or other correctional facility?” (answers: no vs.&nbsp;yes)</li>
+</ol></li>
+</ul></li>
+</ul>
+<p><strong>IMPORTANT DISTINCTION REGARDING ACEs:</strong> Adverse childhood experiences that are emotional abuse, physical abuse, and sexual abuse are events that happen directly to the child. In comparison, domestic violence in the household, substance use in the household, mental illness in the household, parental separation or divorce, and incarcerated household member are adverse childhood experiences where the child is present (i.e., a bystander). These events create instability and uncertainty for a child resulting in a chronic stress environment and have been shown repeatedly to increase risk for a multitude of illnesses and risky/maladaptive behaviors.</p>
+</section>
+<section id="demographic-categories" class="level4">
+<h4 class="anchored" data-anchor-id="demographic-categories">Demographic Categories</h4>
+<p>We will be exploring 6 different demographics that were also collected alongside the ACEs. To better understand how these demographics result in different prevalence of ACEs, we will be breaking each of the 6 categories down into subsections. The 6 different demographics we will be exploring consist of Gender, Age, Race/Ethnicity, Income, Education, and Employment. Within each of these subsection I will explain the corresponding categories in the begginning to avoid scrolling back and forth from the top to the bottom.</p>
+</section>
+</section>
+<section id="reasons-for-exploration" class="level3">
+<h3 class="anchored" data-anchor-id="reasons-for-exploration">Reasons for Exploration</h3>
+<p>I hope to further understand how the interaction of different demographics effects prevalence within ACEs categories. Being able to break down the demographics by ACE type will allow for an inspection of prevalence that I have never seen or read. Most studies report the number of ACEs that are shown to result in long-term impairments, but I have never seen a study break down the results to ACE type which could reveal a plethora of information of those most at risk that would otherwise covered up by reporting the number of ACEs experienced.</p>
+</section>
+</section>
+<section id="demographics-of-those-experiencing-aces" class="level2">
+<h2 class="anchored" data-anchor-id="demographics-of-those-experiencing-aces">Demographics of Those Experiencing ACEs</h2>
+<section id="gender" class="level3">
+<h3 class="anchored" data-anchor-id="gender">Gender</h3>
+<p>The gender category consisted of males or females. We know gender is a spectrum and I would like to acknowledge that these two categories do not represent everyone especially as a general population.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="demographics_files/figure-html/gender figure-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Comments</strong>:</p>
+<ul>
+<li>Overall, a greater percentage of females report experiencing ACEs compared to males.<br>
+</li>
+<li>Similarities between genders for ACE reporting is shown for categories of emotional abuse and parental separation or divorce, but females report a greater prevalence of substance use in the household, sexual abuse (this large difference could also be due to under reporting for males because it is very stigmatized), mental illness in the household, and domestic violence in the household compared to males who report a greater prevalence of physical abuse and having an incarcerated household member.</li>
+</ul>
+</section>
+<section id="age" class="level3">
+<h3 class="anchored" data-anchor-id="age">Age</h3>
+<p>The age category consisted of 6 groupings: 18-24, 25-34, 35-44, 45-54, 55-64, and <span class="math inline">\(\geq\)</span> 65. Understanding prevalence of ACEs at different ages can provide vital information as to trends through different generations of people.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="demographics_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Comment on Total Prevalence by Age Group</strong>:</p>
+<ul>
+<li>The figure above shows the prevalence of ACEs decreasing over generations which is a positive finding!</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="demographics_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Comments on Prevalence by Category</strong>:</p>
+<ul>
+<li>ACE categories for domestic violence in the household, physical abuse, sexual abuse, parental separation or divorce, and substance use in the household show a general increase between age categories 55-64 through 25-34 but show a decrease in age grouping 18-24. This could be indicative of positive change occurring.<br>
+</li>
+<li>ACE categories for emotional abuse, mental illness in the household, and having an incarcerated household member show little to no change from age groups 18-24 to 25-34 which demonstrates a continued problem observable over generations.</li>
+</ul>
+</section>
+<section id="race-and-ethnicity" class="level3">
+<h3 class="anchored" data-anchor-id="race-and-ethnicity">Race and Ethnicity</h3>
+<p>The race and ethnicity category consisted of 8 groupings:</p>
+<ul>
+<li><code>White, non-Hispanic</code>,<br>
+</li>
+<li><code>Hispanic or Latino</code>,<br>
+</li>
+<li><code>Black or African American, non-Hispanic</code>,<br>
+</li>
+<li><code>Asian, non-Hispanic</code>,<br>
+</li>
+<li><code>Multiracial, non-Hispanic</code>,<br>
+</li>
+<li><code>AI/AN, non-Hispanic</code> (American Indian/Alaska Native),<br>
+</li>
+<li><code>Other race, non-Hispanic</code>,<br>
+</li>
+<li><code>NH/OPI, non-Hispanic</code> (Native Hawaiian/Other Pacific Islander).</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="demographics_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Comment on Total Prevalence by Race/Ethnicity Group</strong>:</p>
+<ul>
+<li>White is a bit over represented here for the population of the United States and more marginalized categories are slightly under represented in this sample.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="demographics_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Comments on Prevalence by Category</strong>:</p>
+<ul>
+<li>In particular, for ACE categories of emotional abuse, incarcerated household member, mental illness in the household, and substance abuse in the household, both Multiracial and American Indian’s and/or Alaska Native’s report to have a much higher prevalence of these adverse experiences compared to other races.<br>
+</li>
+<li>For ACE categories of having an incarcerated household member and parental separation or divorce, people with race/ethnicity of Multiracial, American Indian and/or Alaska Native, or Black/African American report a much higher prevalence of these adverse experiences compared to other races.<br>
+</li>
+<li>For ACE categories of domestic violence in the household and sexual abuse, people with race/ethnicity of Multiracial, American Indian and/or Alaska Native, and Native Hawaiian/Other Pacific Islander report to have the greatest prevalence of these adverse experiences compared to other races.</li>
+</ul>
+</section>
+<section id="income" class="level3">
+<h3 class="anchored" data-anchor-id="income">Income</h3>
+<p>The income category consisted of 5 groupings:</p>
+<ul>
+<li><code>&lt;$15,000</code>,<br>
+</li>
+<li><code>$15,000-$24,999</code>,<br>
+</li>
+<li><code>$25,000-$34,999</code>,<br>
+</li>
+<li><code>$35,000-$49,999</code>,<br>
+</li>
+<li><code>&gt;$50,000</code>.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="demographics_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Comment on Total Prevalence by Income Group</strong>:</p>
+<ul>
+<li>A large percentage of those participating in this survey are making greater than $50,000 per year, but not as large as one might expect considering the average income in the US (in 2023) is just below 60,000 according to the census.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="demographics_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Comments on Prevalence by Category</strong>:</p>
+<ul>
+<li>ACE categories of domestic violence in the household, parental separation or divorce, physical abuse, and sexual abuse have distinct trends where higher prevalence results in increased impairments in yearly income. These ACE categories compared to the others all stem from an unstable household where safety may not, and in many cases is not, present which has been shown to lead to profound long-term effects that this visual also illustrates clearly.<br>
+</li>
+<li>ACE categories where an increase in prevalence is more subtle to changes in income per year are substance use in the household and having an incarcerated household member.<br>
+</li>
+<li>ACE categories where prevalence does not appear to have a severe impact on later income per year are mental illness in the household and emotional abuse.</li>
+</ul>
+</section>
+<section id="education" class="level3">
+<h3 class="anchored" data-anchor-id="education">Education</h3>
+<p>The education category consisted of 4 groupings:</p>
+<ul>
+<li><code>Less than high school</code>,<br>
+</li>
+<li><code>High school diploma or GED</code>,</li>
+<li><code>Some college</code>,</li>
+<li><code>College degree</code>.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="demographics_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Comment on Total Prevalence by Education Group</strong>:</p>
+<ul>
+<li>According to the National Center for Education Statistics the dropout rate from high school was 8.3% in 2010 and 5.2% in 2021, so the survey’s population generally have higher prevalence of not finishing high school compared to the national average.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="demographics_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Comments on Prevalence by Category</strong>:</p>
+<ul>
+<li>ACE categories for domestic violence in the household, physical abuse, sexual abuse, parental separation or divorce, substance abuse in the household, and having an incarcerated household member show a clear trend that greater prevalence results in much higher rates of dropping out of high school.<br>
+</li>
+<li>Both emotional abuse and mental illness in the household show a greater prevalence of dropping out of college, but interestingly, those with higher prevalence report also having a college degree compared to it being less prevalent to report dropping out of high school.<br>
+</li>
+<li>Overall, it should be noted that those reporting ACEs of physical abuse, substance abuse in the household, parental separation or divorce, and emotional abuse appear to have a significant impact on dropping out of high school because around 30% of people reporting not completing high school also report one of these ACEs which is a huge problem.</li>
+</ul>
+</section>
+<section id="employment" class="level3">
+<h3 class="anchored" data-anchor-id="employment">Employment</h3>
+<p>Employment consists of 4 groupings:</p>
+<ul>
+<li><code>Other</code>,<br>
+</li>
+<li><code>Unemployed</code>,<br>
+</li>
+<li><code>Unable to work</code>,<br>
+</li>
+<li><code>Employed</code>.</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="demographics_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Comment on Total Prevalence by Employment Group</strong>:</p>
+<ul>
+<li>The figure above shows that the majority of those in the survey are employed or other. I was unable to find anything conclusive on what the category other meant in this survey, but based on some searching the “other” category used when asked about employment often refers to self-employment or being an independent contractor.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="demographics_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Comments on Prevalence by Category</strong>:</p>
+<ul>
+<li>Most categories of ACEs have those reporting unemployment or unable to work as relatively the same prevalence (i.e., domestic violence, physical abuse, and mental illness in the household), but those who have experienced adversity of emotional abuse, parental separation or divorce, or having an incarcerated household member are shown to report more unemployment compared to unable to work.<br>
+</li>
+<li>Both sexual abuse and substance use in the household report higher prevalence of unable to work compared to unemployed.<br>
+</li>
+<li>All ACE categories besides sexual abuse report higher prevalence of employed compared to “other” whereas those who report sexual abuse have the same prevalence for being employed compared to “other”.</li>
+</ul>
+</section>
+</section>
+<section id="discussion-and-limitations" class="level2">
+<h2 class="anchored" data-anchor-id="discussion-and-limitations">Discussion and Limitations</h2>
+<p>All of the explorations done in this blog were based on visual inspection and comparison through inspection (i.e., no statistical tests were run). I do not have the original data from this study which is limiting. Another factor that should be mentioned is that this data was collected through surveys and was likely to have a response bias from the low response rate.</p>
+<p>I have yet to see anyone do this or explore this avenue of how the type of ACE effects a person, and based on the findings, it should be further looked into how or if differing types of ACEs have different risk factors along with result in different long-term effects for the person. If we know certain populations are more at risk for certain ACEs, our goal should be targeting those populations to prevent, or limit, the ACE before it occurs.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

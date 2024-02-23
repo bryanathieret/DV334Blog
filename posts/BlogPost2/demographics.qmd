@@ -1,0 +1,894 @@
+---
+title: "Demographics for Those With Adverse Childhood Events"
+author: "Bryana A.S. Thieret"
+date: "2024-02-17"
+format: 
+  html: 
+    page-layout: full
+    messages: false
+    echo: false
+    warning: false
+    fig-align: center
+categories: [news]
+---
+
+## Introduction  
+
+This is a similar continuation from my first post, but this time rather than focusing on where adverse childhood events (ACEs) were most prevalent by state and type of adversity, I will be exploring the demographics of those experiencing ACEs in addition to breaking it down by adversity type.  
+
+### Dataset  
+
+The dataset of interest this time scrapped from a CDC website article named, "Prevalence of Adverse Childhood Experiences Among U.S. Adults — Behavioral Risk Factor Surveillance System, 2011–2020" and can be found [here](https://www.cdc.gov/mmwr/volumes/72/wr/mm7226a2.htm) in Table 3. As mentioned in the first post, this data was collected from 2011 to 2020 and is the most complete surveys done in the United States evaluating prevalence of ACEs.  
+
+
+
+
+### Definitions   
+#### Adverse Childhood Events  
+
+* This dataset has many abbreviations and could be interpreted wrong without the following operational definitions from the study expressed in questions asked (These were not the only questions asked to determine if the person experienced a specific adverse childhood event, but I hope this gives a better idea on how this was defined).    
+  - Emotional abuse (`Emotional`): 
+    1. "How often did a parent or adult in your home ever swear at you, insult you, or put you down?" (answers: never vs. at least once)  
+  - Physical abuse (`Physical`):  
+    1. "How often did your parents or adults in your home ever hit, beat, kick, or physically hurt you in any way? Do not include spanking" (answers: never vs. at least once)  
+  - Sexual abuse (`Sexual`):  
+    1. "How often did anyone at least 5 years older than you or an adult, ever try to make you touch them sexually?" (answers: never vs. at least once)  
+  - Separated/Divorced (`SeparatedDivorced`):  
+    1. "Were your parents separated or divorced?" (answers: no vs. yes)  
+  - Mental illness in the household (`Mental_Illness_HH`):  
+    1. "Did you live with anyone who was depressed, mentally ill or suicidal?" (answers: no vs. yes)  
+  - Substance Use in household (`Substance_Use_HH`):  
+    1. "Did you live with anyone who used illegal street drugs or who abused prescription medications?" (answers: no vs. yes)  
+  - Domestic violence in household (`DV`):  
+    1. "How often did your parents or adults in your home ever slap, hit, kick, punch or beat each other up?" (answers: never vs. at least once)  
+  - Incarcerated household member (`Incarcerated_HM`):  
+    1. "Did you live with anyone who served time or was sentenced to serve time in prison, jail, or other correctional facility?" (answers: no vs. yes)  
+
+
+**IMPORTANT DISTINCTION REGARDING ACEs:** Adverse childhood experiences that are emotional abuse, physical abuse, and sexual abuse are events that happen directly to the child. In comparison, domestic violence in the household, substance use in the household, mental illness in the household, parental separation or divorce, and incarcerated household member are adverse childhood experiences where the child is present (i.e., a bystander). These events create instability and uncertainty for a child resulting in a chronic stress environment and have been shown repeatedly to increase risk for a multitude of illnesses and risky/maladaptive behaviors.  
+
+#### Demographic Categories  
+
+We will be exploring 6 different demographics that were also collected alongside the ACEs. To better understand how these demographics result in different prevalence of ACEs, we will be breaking each of the 6 categories down into subsections. The 6 different demographics we will be exploring consist of Gender, Age, Race/Ethnicity, Income, Education, and Employment. Within each of these subsection I will explain the corresponding categories in the begginning to avoid scrolling back and forth from the top to the bottom.  
+
+
+### Reasons for Exploration    
+
+I hope to further understand how the interaction of different demographics effects prevalence within ACEs categories. Being able to break down the demographics by ACE type will allow for an inspection of prevalence that I have never seen or read. Most studies report the number of ACEs that are shown to result in long-term impairments, but I have never seen a study break down the results to ACE type which could reveal a plethora of information of those most at risk that would otherwise covered up by reporting the number of ACEs experienced.  
+
+
+
+```{r all the important code scrapping to get the data}
+library(tidyverse)
+library(rvest)
+library(janitor)
+library(maps)
+library(ggbeeswarm)
+library(gridExtra)
+library(paletteer)
+library(knitr)
+library(wesanderson)
+
+
+url = "https://www.cdc.gov/mmwr/volumes/72/wr/mm7226a2.htm"
+h = read_html(url)
+tab = h |> html_nodes("table")
+aces = tab[[3]] |> html_table()
+aces_full = aces |> row_to_names(1) 
+
+aces_full = aces_full |> slice(1, 3:4, 6:11, 13:20, 22:26, 28:31, 33:36) |>
+  # renames the values so they make more sense and don't have weird characters:
+  rename("n_responses" = `Total no.*, unweighted`, 
+                    "Total_Percentage" = `Weighted % (95% CI)`,
+                    "Emotional" = `Emotional†`,
+                    "Physical" = `Physical`,
+                    "Sexual" = `Sexual§`,
+                    "DV" = `Witnessed intimate partner violence`,
+                    "Substance_Use_HH" = `Household substance use¶`,
+                    "Mental_Illness_HH" = `Household mental illness`,
+                    "SeparationDivorce" = `Parental separation or divorce†`,
+                    "Incarcerated_HM" = `Incarcerated household member`) |>
+  
+  
+  # separates the percentage from CI
+  separate(col = Total_Percentage, into = c("Total_Percentage", "Total_CI"), sep = c(" ")) |>
+  separate(col = Emotional, into = c("Emotional", "Emotional_CI"), sep = c(" ")) |>
+  separate(col = Physical, into = c("Physical", "Physical_CI"), sep = " ") |>
+  separate(col = Sexual, into = c("Sexual", "Sexual_CI"), sep = "\\(") |>
+  separate(col = DV, into = c("DV", "DV_CI"), sep = " ") |>
+  separate(col = Substance_Use_HH, into = c("Substance_Use_HH", "Substance_Use_HH_CI"), sep = " ") |>
+  separate(col = Mental_Illness_HH, into = c("Mental_Illness_HH", "Mental_Illness_HH_CI"), sep = " ") |>
+  separate(col = SeparationDivorce, into = c("SeparationDivorce", "SeparationDivorce_CI"), sep = " ") |>
+  separate(col = Incarcerated_HM, into = c("Incarcerated_HM", "Incarcerated_HM_CI"), sep = " ") |>
+  
+  
+  separate(col = Total_CI, into = c("Total_LCI", "Total_UCI"), sep = "–") |>
+  separate(col = Emotional_CI, into = c("Emotional_LCI", "Emotional_UCI"), sep = "–") |>
+  separate(col = Physical_CI, into = c("Physical_LCI", "Physical_UCI"), sep = "–") |>
+  separate(col = Sexual_CI, into = c("Sexual_LCI", "Sexual_UCI"), sep = "–") |>
+  separate(col = DV_CI, into = c("DV_LCI", "DV_UCI"), sep = "–" ) |>
+  separate(col = Substance_Use_HH_CI, into = c("Substance_Use_HH_LCI", "Substance_Use_HH_UCI"), sep = "–") |>
+  separate(col = Mental_Illness_HH_CI, into = c("Mental_Illness_HH_LCI", "Mental_Illness_HH_UCI"), sep = "–") |>
+  separate(col = SeparationDivorce_CI, into = c("SeparationDivorce_LCI", "SeparationDivorce_UCI"), sep = "–") |>
+  separate(col = Incarcerated_HM_CI, into = c("Incarcerated_HH_LCI", "Incarcerated_HH_UCI"), sep = "–") |>
+  
+  mutate(Total_LCI = parse_number(Total_LCI),
+         Total_UCI = parse_number(Total_UCI),
+         
+         Emotional_UCI = parse_number(Emotional_UCI),
+         Emotional_LCI = parse_number(Emotional_LCI),
+         
+         Physical_LCI = parse_number(Physical_LCI),
+         Physical_UCI = parse_number(Physical_UCI),
+         
+         Sexual_LCI = parse_number(Sexual_LCI), 
+         Sexual_UCI = parse_number(Sexual_UCI),
+         
+         DV_LCI = parse_number(DV_LCI),
+         DV_UCI = parse_number(DV_UCI),
+         
+         Substance_Use_HH_LCI = parse_number(Substance_Use_HH_LCI),
+         Substance_Use_HH_UCI = parse_number(Substance_Use_HH_UCI),
+         
+         Mental_Illness_HH_LCI = parse_number(Mental_Illness_HH_LCI),
+         Mental_Illness_HH_UCI = parse_number(Mental_Illness_HH_UCI),
+         
+         SeparationDivorce_LCI = parse_number(SeparationDivorce_LCI),
+         SeparationDivorce_UCI = parse_number(SeparationDivorce_UCI),
+         
+         Incarcerated_HH_LCI = parse_number(Incarcerated_HH_LCI),
+         Incarcerated_HH_UCI = parse_number(Incarcerated_HH_UCI)
+         )
+
+aces_full = aces_full |>
+  mutate(Total_Percentage = as.numeric(Total_Percentage), Total_LCI = as.numeric(Total_LCI), Total_UCI = as.numeric(Total_UCI),
+         
+         Emotional = as.numeric(Emotional), Emotional_LCI = as.numeric(Emotional_LCI), Emotional_UCI = as.numeric(Emotional_UCI),
+         
+         Physical = as.numeric(Physical), Physical_LCI = as.numeric(Physical_LCI), Physical_UCI = as.numeric(Physical_UCI),
+         
+         Sexual = as.numeric(Sexual), Sexual_LCI = as.numeric(Sexual_LCI), Sexual_UCI = as.numeric(Sexual_UCI),
+         
+         DV = as.numeric(DV), DV_LCI = as.numeric(DV_LCI), DV_UCI = as.numeric(DV_UCI),
+         
+         Substance_Use_HH = as.numeric(Substance_Use_HH), Substance_Use_HH_LCI = as.numeric(Substance_Use_HH_LCI), Substance_Use_HH_UCI = as.numeric(Substance_Use_HH_UCI),
+         
+         Mental_Illness_HH = as.numeric(Mental_Illness_HH), Mental_Illness_HH_LCI = as.numeric(Mental_Illness_HH_LCI), Mental_Illness_HH_UCI = as.numeric(Mental_Illness_HH_UCI),
+         
+         SeparationDivorce = as.numeric(SeparationDivorce), SeparationDivorce_LCI = as.numeric(SeparationDivorce_LCI), SeparationDivorce_UCI = as.numeric(SeparationDivorce_UCI),
+         
+         Incarcerated_HM = as.numeric(Incarcerated_HM), Incarcerated_HH_LCI = as.numeric(Incarcerated_HH_LCI), Incarcerated_HH_UCI = as.numeric(Incarcerated_HH_UCI)
+         
+         ) |>
+  select(-n_responses)
+
+```
+
+
+
+## Demographics of Those Experiencing ACEs  
+
+### Gender  
+
+The gender category consisted of males or females. We know gender is a spectrum and I would like to acknowledge that these two categories do not represent everyone especially as a general population.  
+
+```{r gender differences}
+gender = aces_full |> 
+  slice(2:3) |> 
+  pivot_longer(c(2, 5, 8, 11, 14, 17, 20, 23, 26), names_to = "Category", values_to = "Prevalence") |>
+  mutate(Characteristic = as.factor(Characteristic)) |> select(Category, Characteristic, Prevalence) 
+
+gender1 = aces_full |> pivot_longer(c(3, 6, 9, 12, 15, 18, 21, 24, 27), names_to = "Category", values_to = "LCI") |> mutate(Characteristic = as.factor(Characteristic)) |> select(Characteristic, Category, LCI) |>
+  separate(col = Category, into = c("Category", "Stat"), sep = "_")
+
+gender2 = aces_full |> pivot_longer(c(4, 7, 10, 13, 16, 19, 22, 25, 28), names_to = "Category", values_to = "UCI") |>
+  mutate(Characteristic = as.factor(Characteristic)) |>
+select(Characteristic, Category, UCI) |>
+  separate(col = Category, into = c("Category", "Stat"), sep = "_")
+
+bars = left_join(gender1, gender2, by = c("Category", "Characteristic")) |>
+  select(Characteristic, Category, LCI, UCI) 
+##|>
+  #pivot_longer(c(3:4), names_to = "Stat", values_to = "Values")
+
+bars1 = bars |> filter(Category == "Total") |>
+  filter(Characteristic == "Female" | Characteristic == "Male")
+
+
+gendertot = gender |> filter(Category == "Total_Percentage") |>
+  separate(Category, into = c("Category", "Category1"), sep = "_")
+
+genderplot1 =   ggplot() + 
+  geom_col(data = gendertot, aes(x = Category, y = Prevalence, fill = Characteristic), position = position_dodge(0.9), color = "black", linewidth = 0.8) +
+  geom_errorbar(data = bars1, aes(ymin = LCI, ymax = UCI, x = Category, group = Characteristic), position = position_dodge(0.9), width = 0.5, linewidth = 0.8) +
+    labs(caption = "95% CI are shown through the errorbars", x = "Overall", y = "Prevalence (%)") + 
+    theme_classic() +
+    theme(
+      axis.text.x = element_blank(),
+      legend.title = element_blank(),
+      legend.position = c(0.15, -0.05),
+      legend.box = "horizontal",
+      legend.direction = "horizontal",
+      legend.text = element_text(color = "black", family = "Avenir", size = 14),
+      axis.title = element_text(color = "black", family = "Avenir", size = 22),
+      axis.text.y = element_text(color = "black", family = "Avenir", size = 19),
+      plot.subtitle = element_text(color = "black", family = "Avenir")
+    ) + 
+    scale_fill_manual(values = c("#00AFBB", "#E7B800"))
+    
+
+bars2 = bars |> filter(Category != "Total") |>
+  filter(Characteristic == "Female" | Characteristic == "Male") |>
+  mutate(Category = fct_recode(Category,
+                               "Substance_Use_HH" = "Substance",
+                               "Mental_Illness_HH" = "Mental",
+                               "Incarcerated_HM" = "Incarcerated"))
+
+
+gendertot2 = gender |> 
+  filter(Category != "Total_Percentage")
+
+genderplot2 = ggplot() + 
+  geom_col(data = gendertot2, aes(x = Category, y = Prevalence, fill = Characteristic), position = position_dodge(0.9), color = "black", linewidth = 0.8) +
+  geom_errorbar(data = bars2, aes(ymin = LCI, ymax = UCI, x = Category, group = Characteristic), position = position_dodge(0.9), width = 0.5, linewidth = 0.8) + 
+  scale_fill_manual(values = c("#00AFBB", "#E7B800")) +
+  theme_minimal() +
+  coord_flip() +
+  labs(caption = "95% CI are shown through the errorbars", y = "Prevalence (%)") + 
+  theme(
+    legend.title = element_blank(),
+    legend.position = "top",
+    legend.text = element_text(color = "black", family = "Avenir", size = 14),
+    axis.title.y = element_blank(),
+    axis.text = element_text(color = "black", family = "Avenir", size = 16),
+    axis.title.x = element_text(color = "black", family = "Avenir", size = 20),
+    plot.subtitle = element_text(color = "black", family = "Avenir")
+  )
+
+```
+
+```{r gender figure, fig.width=12, fig.height=6}
+grid.arrange(genderplot1, genderplot2, nrow = 1)
+```
+
+**Comments**:  
+
+* Overall, a greater percentage of females report experiencing ACEs compared to males.  
+* Similarities between genders for ACE reporting is shown for categories of emotional abuse and parental separation or divorce, but females report a greater prevalence of substance use in the household, sexual abuse (this large difference could also be due to under reporting for males because it is very stigmatized), mental illness in the household, and domestic violence in the household compared to males who report a greater prevalence of physical abuse and having an incarcerated household member.  
+
+### Age  
+
+The age category consisted of 6 groupings: 18-24, 25-34, 35-44, 45-54, 55-64, and $\geq$ 65. Understanding prevalence of ACEs at different ages can provide vital information as to trends through different generations of people.  
+
+```{r}
+age = aces_full |> 
+  slice(4:9) |> 
+  pivot_longer(c(2, 5, 8, 11, 14, 17, 20, 23, 26), names_to = "Category", values_to = "Prevalence") |>
+  mutate(Characteristic = as.factor(Characteristic)) |> select(Category, Characteristic, Prevalence) 
+
+
+
+age1 = aces_full |> pivot_longer(c(3, 6, 9, 12, 15, 18, 21, 24, 27), names_to = "Category", values_to = "LCI") |> mutate(Characteristic = as.factor(Characteristic)) |> select(Characteristic, Category, LCI) |>
+  separate(col = Category, into = c("Category", "Stat"), sep = "_")
+
+
+age2 = aces_full |> pivot_longer(c(4, 7, 10, 13, 16, 19, 22, 25, 28), names_to = "Category", values_to = "UCI") |>
+  mutate(Characteristic = as.factor(Characteristic)) |>
+select(Characteristic, Category, UCI) |>
+  separate(col = Category, into = c("Category", "Stat"), sep = "_")
+
+
+
+bars = left_join(age1, age2, by = c("Category", "Characteristic")) |>
+  select(Characteristic, Category, LCI, UCI) 
+##|>
+  #pivot_longer(c(3:4), names_to = "Stat", values_to = "Values")
+
+bars1 = bars |> filter(Category == "Total") |>
+  filter(Characteristic == "18–24" | Characteristic == "25–34" | Characteristic == "35–44" | Characteristic == "45–54" | 
+           Characteristic == "55–64" | Characteristic == "≥65")
+
+
+agetot = age |> filter(Category == "Total_Percentage") |>
+  separate(Category, into = c("Category", "Category1"), sep = "_") |>
+  ungroup() |>
+  mutate(Characteristic = fct_reorder(Characteristic, Prevalence)) 
+  
+
+
+
+ageplot1 = ggplot() + 
+  geom_col(data = agetot, aes(x = Characteristic, y = Prevalence, fill = Characteristic), position = position_dodge(0.9), color = "black", linewidth = 0.8, show.legend = FALSE) +
+  geom_errorbar(data = bars1, aes(ymin = LCI, ymax = UCI, x = Characteristic, group = Characteristic), position = position_dodge(0.9), width = 0.5, linewidth = 0.8) +
+    labs(caption = "95% CI are shown through the errorbars", x = "Overall", y = "Prevalence (%)") + 
+    theme_classic() +
+    theme(
+      axis.text.x = element_text(color = "black", family = "Avenir", size = 19),
+      legend.title = element_blank(),
+      legend.position = "top",
+      legend.box = "horizontal",
+      legend.direction = "horizontal",
+      legend.text = element_text(color = "black", family = "Avenir", size = 14),
+      axis.title.y = element_blank(),
+      axis.title.x = element_text(color = "black", family = "Avenir", size = 22),
+      axis.text.y = element_text(color = "black", family = "Avenir", size = 19),
+      plot.subtitle = element_text(color = "black", family = "Avenir")
+    ) + 
+  coord_flip() +
+  scale_fill_brewer(palette = "Dark2", direction = -1)
+    
+
+bars2 = bars |> filter(Category != "Total") |>
+  filter(Characteristic == "18–24" | Characteristic == "25–34" | Characteristic == "35–44" | Characteristic == "45–54" | 
+           Characteristic == "55–64" | Characteristic == "≥65") |>
+  mutate(Category = fct_recode(Category,
+                               "Substance_Use_HH" = "Substance",
+                               "Mental_Illness_HH" = "Mental",
+                               "Incarcerated_HM" = "Incarcerated"))
+
+
+agetot2 = age |> 
+  filter(Category != "Total_Percentage") |> 
+  ungroup() |>
+  mutate(Characteristic = fct_relevel(Characteristic, c("≥65", "55–64", "45–54" , "35–44", "25–34", "18–24"))) 
+
+ageplot2 = ggplot() + 
+  geom_col(data = agetot2, aes(x = Characteristic, y = Prevalence, fill = Characteristic), position = position_dodge(0.9), color = "black", linewidth = 0.8) +
+  geom_errorbar(data = bars2, aes(ymin = LCI, ymax = UCI, x = Characteristic, group = Characteristic), position = position_dodge(0.9), width = 0.5, linewidth = 0.8) + 
+  scale_fill_brewer(palette = "Dark2") +
+  theme_minimal() +
+  coord_flip() +
+  labs(caption = "95% CI are shown through the errorbars", y = "Prevalence (%)") + 
+  theme(
+    legend.title = element_blank(),
+    legend.position = "top",
+    legend.text = element_text(color = "black", family = "Avenir", size = 14),
+    axis.title.y = element_blank(),
+    axis.text = element_text(color = "black", family = "Avenir", size = 16),
+    axis.title.x = element_text(color = "black", family = "Avenir", size = 20),
+    plot.subtitle = element_text(color = "black", family = "Avenir"),
+    strip.text = element_text(color = "black", family = "Avenir", size = 14)
+  ) + 
+  facet_wrap(~Category)
+
+```
+
+```{r fig.width=6, fig.height=5, fig.align='center'}
+ageplot1
+```
+
+**Comment on Total Prevalence by Age Group**:  
+
+* The figure above shows the prevalence of ACEs decreasing over generations which is a positive finding!  
+
+
+```{r fig.width=12, fig.height=8}
+ageplot2
+```
+
+**Comments on Prevalence by Category**:  
+
+* ACE categories for domestic violence in the household, physical abuse, sexual abuse, parental separation or divorce, and substance use in the household show a general increase between age categories 55-64 through 25-34 but show a decrease in age grouping 18-24. This could be indicative of positive change occurring.     
+* ACE categories for emotional abuse, mental illness in the household, and having an incarcerated household member show little to no change from age groups 18-24 to 25-34 which demonstrates a continued problem observable over generations.  
+
+
+### Race and Ethnicity  
+
+The race and ethnicity category consisted of 8 groupings:  
+
+  * `White, non-Hispanic`,  
+  * `Hispanic or Latino`,  
+  * `Black or African American, non-Hispanic`,  
+  * `Asian, non-Hispanic`,  
+  * `Multiracial, non-Hispanic`,  
+  * `AI/AN, non-Hispanic` (American Indian/Alaska Native),  
+  * `Other race, non-Hispanic`,  
+  * `NH/OPI, non-Hispanic` (Native Hawaiian/Other Pacific Islander).   
+
+
+```{r}
+race = aces_full |> 
+  slice(10:17) |> 
+  pivot_longer(c(2, 5, 8, 11, 14, 17, 20, 23, 26), names_to = "Category", values_to = "Prevalence") |>
+  mutate(Characteristic = as.factor(Characteristic)) |> select(Category, Characteristic, Prevalence) 
+
+
+
+race1 = aces_full |> pivot_longer(c(3, 6, 9, 12, 15, 18, 21, 24, 27), names_to = "Category", values_to = "LCI") |> mutate(Characteristic = as.factor(Characteristic)) |> select(Characteristic, Category, LCI) |>
+  separate(col = Category, into = c("Category", "Stat"), sep = "_")
+
+
+race2 = aces_full |> pivot_longer(c(4, 7, 10, 13, 16, 19, 22, 25, 28), names_to = "Category", values_to = "UCI") |>
+  mutate(Characteristic = as.factor(Characteristic)) |>
+select(Characteristic, Category, UCI) |>
+  separate(col = Category, into = c("Category", "Stat"), sep = "_")
+
+
+
+bars = left_join(race1, race2, by = c("Category", "Characteristic")) |>
+  select(Characteristic, Category, LCI, UCI) 
+##|>
+  #pivot_longer(c(3:4), names_to = "Stat", values_to = "Values")
+
+bars1 = bars |> filter(Category == "Total") |>
+  filter(Characteristic == 'AI/AN, non-Hispanic' | Characteristic == 'Asian, non-Hispanic' | Characteristic == 'Black or African American, non-Hispanic' | Characteristic == 'NH/OPI, non-Hispanic' | 
+           Characteristic == 'White, non-Hispanic' | Characteristic == 'Hispanic or Latino' |
+           Characteristic == 'Multiracial, non-Hispanic' | Characteristic == 'Other race, non-Hispanic')
+
+
+racetot = race |> filter(Category == "Total_Percentage") |>
+  separate(Category, into = c("Category", "Category1"), sep = "_") |>
+  ungroup() |>
+  mutate(Characteristic = fct_reorder(Characteristic, Prevalence)) 
+  
+
+
+
+raceplot1 = ggplot() + 
+  geom_col(data = racetot, aes(x = Characteristic, y = Prevalence, fill = Characteristic), position = position_dodge(0.9), color = "black", linewidth = 0.4, show.legend = FALSE) +
+  geom_errorbar(data = bars1, aes(ymin = LCI, ymax = UCI, x = Characteristic, group = Characteristic), position = position_dodge(0.9), width = 0.5, linewidth = 0.4) +
+    labs(caption = "95% CI are shown through the errorbars", x = "Overall", y = "Prevalence (%)") + 
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(color = "black", family = "Avenir", size = 19),
+      legend.title = element_blank(),
+      legend.position = "top",
+      legend.box = "horizontal",
+      legend.direction = "horizontal",
+      legend.text = element_text(color = "black", family = "Avenir", size = 10),
+      axis.title.y = element_blank(),
+      axis.title.x = element_text(color = "black", family = "Avenir", size = 22),
+      axis.text.y = element_text(color = "black", family = "Avenir", size = 19),
+      plot.subtitle = element_text(color = "black", family = "Avenir")
+    ) + 
+  coord_flip() +
+  scale_fill_brewer(palette = "Set1")
+    
+
+bars2 = bars |> filter(Category != "Total") |>
+  filter(Characteristic == 'AI/AN, non-Hispanic' | Characteristic == 'Asian, non-Hispanic' | Characteristic == 'Black or African American, non-Hispanic' | Characteristic == 'NH/OPI, non-Hispanic' | 
+           Characteristic == 'White, non-Hispanic' | Characteristic == 'Hispanic or Latino' |
+           Characteristic == 'Multiracial, non-Hispanic' | Characteristic == 'Other race, non-Hispanic') |>
+  mutate(Category = fct_recode(Category,
+                               "Substance_Use_HH" = "Substance",
+                               "Mental_Illness_HH" = "Mental",
+                               "Incarcerated_HM" = "Incarcerated"))
+
+
+racetot2 = race |> 
+  filter(Category != "Total_Percentage") 
+
+raceplot2 = ggplot() + 
+  geom_col(data = racetot2, aes(x = Characteristic, y = Prevalence, fill = Characteristic), position = position_dodge(0.9), color = "black", linewidth = 0.4) +
+  geom_errorbar(data = bars2, aes(ymin = LCI, ymax = UCI, x = Characteristic, group = Characteristic), position = position_dodge(0.9), width = 0.5, linewidth = 0.4) + 
+  scale_fill_brewer(palette = "Set1") +
+  theme_minimal() +
+  coord_flip() +
+  labs(caption = "95% CI are shown through the errorbars", y = "Prevalence (%)", title = " ") + 
+  theme(
+    legend.title = element_blank(),
+    legend.position = c(0.3, 1.1),
+    legend.direction = "horizontal",
+    legend.box = "horizontal",
+    legend.text = element_text(color = "black", family = "Avenir", size = 10),
+    axis.title.y = element_blank(),
+    axis.text = element_text(color = "black", family = "Avenir", size = 16),
+    axis.title.x = element_text(color = "black", family = "Avenir", size = 20),
+    plot.subtitle = element_text(color = "black", family = "Avenir"),
+    strip.text = element_text(color = "black", family = "Avenir", size = 14),
+    plot.title = element_text(size = 33)
+  ) + 
+  facet_wrap(~Category)
+```
+
+
+
+```{r fig.width=12, fig.height=5, fig.align='center'}
+raceplot1
+```
+
+
+**Comment on Total Prevalence by Race/Ethnicity Group**:  
+
+* White is a bit over represented here for the population of the United States and more marginalized categories are slightly under represented in this sample.  
+
+
+
+```{r fig.width=12, fig.height=8}
+raceplot2
+```
+
+**Comments on Prevalence by Category**:  
+
+* In particular, for ACE categories of emotional abuse, incarcerated household member, mental illness in the household, and substance abuse in the household, both Multiracial and American Indian's and/or Alaska Native's report to have a much higher prevalence of these adverse experiences compared to other races.  
+* For ACE categories of having an incarcerated household member and parental separation or divorce, people with race/ethnicity of Multiracial, American Indian and/or Alaska Native, or Black/African American report a much higher prevalence of these adverse experiences compared to other races.  
+* For ACE categories of domestic violence in the household and sexual abuse, people with race/ethnicity of Multiracial, American Indian and/or Alaska Native, and Native Hawaiian/Other Pacific Islander report to have the greatest prevalence of these adverse experiences compared to other races.  
+
+
+
+
+### Income  
+
+The income category consisted of 5 groupings:   
+
+  * `<$15,000`,  
+  * `$15,000-$24,999`,  
+  * `$25,000-$34,999`,  
+  * `$35,000-$49,999`,  
+  * `>$50,000`.  
+
+
+```{r}
+income = aces_full |> 
+  slice(18:22) |> 
+  pivot_longer(c(2, 5, 8, 11, 14, 17, 20, 23, 26), names_to = "Category", values_to = "Prevalence") |>
+  mutate(Characteristic = as.factor(Characteristic)) |> select(Category, Characteristic, Prevalence) 
+
+
+
+race1 = aces_full |> pivot_longer(c(3, 6, 9, 12, 15, 18, 21, 24, 27), names_to = "Category", values_to = "LCI") |> mutate(Characteristic = as.factor(Characteristic)) |> select(Characteristic, Category, LCI) |>
+  separate(col = Category, into = c("Category", "Stat"), sep = "_")
+
+
+race2 = aces_full |> pivot_longer(c(4, 7, 10, 13, 16, 19, 22, 25, 28), names_to = "Category", values_to = "UCI") |>
+  mutate(Characteristic = as.factor(Characteristic)) |>
+select(Characteristic, Category, UCI) |>
+  separate(col = Category, into = c("Category", "Stat"), sep = "_")
+
+
+
+bars = left_join(race1, race2, by = c("Category", "Characteristic")) |>
+  select(Characteristic, Category, LCI, UCI) 
+##|>
+  #pivot_longer(c(3:4), names_to = "Stat", values_to = "Values")
+
+bars1 = bars |> filter(Category == "Total") |>
+  filter(Characteristic == '<$15,000' | Characteristic == '$25,000–$34,999' | Characteristic == '$35,000–$49,999' | Characteristic == '>$50,000' | Characteristic == '$15,000–$24,999')
+
+
+incometot = income |> filter(Category == "Total_Percentage") |>
+  separate(Category, into = c("Category", "Category1"), sep = "_") |>
+  ungroup() |>
+  mutate(Characteristic = fct_relevel(Characteristic, c('>$50,000', '$35,000–$49,999', '$25,000–$34,999' , '$15,000–$24,999', '<$15,000')))
+  
+
+
+
+incomeplot1 = ggplot() + 
+  geom_col(data = incometot, aes(x = Characteristic, y = Prevalence, fill = Characteristic), position = position_dodge(0.9), color = "black", linewidth = 0.4, show.legend = FALSE) +
+  geom_errorbar(data = bars1, aes(ymin = LCI, ymax = UCI, x = Characteristic, group = Characteristic), position = position_dodge(0.9), width = 0.5, linewidth = 0.4) +
+    labs(caption = "95% CI are shown through the errorbars", x = "Overall", y = "Prevalence (%)") + 
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(color = "black", family = "Avenir", size = 19),
+      legend.title = element_blank(),
+      legend.position = "top",
+      legend.box = "horizontal",
+      legend.direction = "horizontal",
+      legend.text = element_text(color = "black", family = "Avenir", size = 10),
+      axis.title.y = element_blank(),
+      axis.title.x = element_text(color = "black", family = "Avenir", size = 22),
+      axis.text.y = element_text(color = "black", family = "Avenir", size = 19),
+      plot.subtitle = element_text(color = "black", family = "Avenir")
+    ) + 
+  coord_flip() +
+scale_fill_manual(values = wes_palette("Royal2", n = 5))
+    
+
+bars2 = bars |> filter(Category != "Total") |>
+  filter(Characteristic == '<$15,000' | Characteristic == '$25,000–$34,999' | Characteristic == '$35,000–$49,999' | Characteristic == '>$50,000' | Characteristic == '$15,000–$24,999') |>
+  mutate(Category = fct_recode(Category,
+                               "Substance_Use_HH" = "Substance",
+                               "Mental_Illness_HH" = "Mental",
+                               "Incarcerated_HM" = "Incarcerated"))
+
+
+
+
+incometot2 = income |> 
+  filter(Category != "Total_Percentage") |>
+  mutate(Characteristic = fct_relevel(Characteristic, c('>$50,000', '$35,000–$49,999', '$25,000–$34,999' , '$15,000–$24,999', '<$15,000')))
+
+incomeplot2 = ggplot() + 
+  geom_col(data = incometot2, aes(x = Characteristic, y = Prevalence, fill = Characteristic), position = position_dodge(0.9), color = "black", linewidth = 0.4) +
+  geom_errorbar(data = bars2, aes(ymin = LCI, ymax = UCI, x = Characteristic, group = Characteristic), position = position_dodge(0.9), width = 0.5, linewidth = 0.4) + 
+  scale_fill_manual(values = wes_palette("Royal2", n = 5)) +
+  theme_minimal() +
+  coord_flip() +
+  labs(caption = "95% CI are shown through the errorbars", y = "Prevalence (%)", title = " ") + 
+  theme(
+    legend.title = element_blank(),
+    legend.position = c(0.45, 1.1),
+    legend.direction = "horizontal",
+    legend.box = "horizontal",
+    legend.text = element_text(color = "black", family = "Avenir", size = 14),
+    axis.title.y = element_blank(),
+    axis.text = element_text(color = "black", family = "Avenir", size = 16),
+    axis.title.x = element_text(color = "black", family = "Avenir", size = 20),
+    plot.subtitle = element_text(color = "black", family = "Avenir"),
+    strip.text = element_text(color = "black", family = "Avenir", size = 14),
+    plot.title = element_text(size = 33)
+  ) + 
+  facet_wrap(~Category)
+```
+
+```{r fig.width=6, fig.height=5, fig.align='center'}
+incomeplot1
+```
+
+**Comment on Total Prevalence by Income Group**:  
+
+* A large percentage of those participating in this survey are making greater than $50,000 per year, but not as large as one might expect considering the average income in the US (in 2023) is just below 60,000 according to the census.   
+
+```{r fig.width=12, fig.height=8}
+incomeplot2
+```
+
+**Comments on Prevalence by Category**:  
+
+* ACE categories of domestic violence in the household, parental separation or divorce, physical abuse, and sexual abuse have distinct trends where higher prevalence results in increased impairments in yearly income. These ACE categories compared to the others all stem from an unstable household where safety may not, and in many cases is not, present which has been shown to lead to profound long-term effects that this visual also illustrates clearly.   
+* ACE categories where an increase in prevalence is more subtle to changes in income per year are substance use in the household and having an incarcerated household member.  
+* ACE categories where prevalence does not appear to have a severe impact on later income per year are mental illness in the household and emotional abuse.  
+
+### Education  
+
+The education category consisted of 4 groupings:  
+  
+  * `Less than high school`,  
+  * `High school diploma or GED`, 
+  * `Some college`,
+  * `College degree`.  
+
+
+```{r}
+education = aces_full |> 
+  slice(23:26) |> 
+  pivot_longer(c(2, 5, 8, 11, 14, 17, 20, 23, 26), names_to = "Category", values_to = "Prevalence") |>
+  mutate(Characteristic = as.factor(Characteristic)) |> select(Category, Characteristic, Prevalence) 
+
+
+
+race1 = aces_full |> pivot_longer(c(3, 6, 9, 12, 15, 18, 21, 24, 27), names_to = "Category", values_to = "LCI") |> mutate(Characteristic = as.factor(Characteristic)) |> select(Characteristic, Category, LCI) |>
+  separate(col = Category, into = c("Category", "Stat"), sep = "_")
+
+
+race2 = aces_full |> pivot_longer(c(4, 7, 10, 13, 16, 19, 22, 25, 28), names_to = "Category", values_to = "UCI") |>
+  mutate(Characteristic = as.factor(Characteristic)) |>
+select(Characteristic, Category, UCI) |>
+  separate(col = Category, into = c("Category", "Stat"), sep = "_")
+
+
+
+bars = left_join(race1, race2, by = c("Category", "Characteristic")) |>
+  select(Characteristic, Category, LCI, UCI) 
+##|>
+  #pivot_longer(c(3:4), names_to = "Stat", values_to = "Values")
+
+bars1 = bars |> filter(Category == "Total") |>
+  filter(Characteristic == 'Less than high school' | Characteristic == 'Some college' | Characteristic == 'College degree' |
+           Characteristic == 'High school diploma or GED')
+
+
+educationtot = education |> filter(Category == "Total_Percentage") |>
+  separate(Category, into = c("Category", "Category1"), sep = "_") |>
+  ungroup() |>
+  mutate(Characteristic = fct_relevel(Characteristic, c('College degree', 'Some college', 'High school diploma or GED' , 'Less than high school')))
+  
+
+
+
+educationplot1 = ggplot() + 
+  geom_col(data = educationtot, aes(x = Characteristic, y = Prevalence, fill = Characteristic), position = position_dodge(0.9), color = "black", linewidth = 0.4, show.legend = FALSE) +
+  geom_errorbar(data = bars1, aes(ymin = LCI, ymax = UCI, x = Characteristic, group = Characteristic), position = position_dodge(0.9), width = 0.5, linewidth = 0.4) +
+    labs(caption = "95% CI are shown through the errorbars", x = "Overall", y = "Prevalence (%)") + 
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(color = "black", family = "Avenir", size = 19),
+      legend.title = element_blank(),
+      legend.position = "top",
+      legend.box = "horizontal",
+      legend.direction = "horizontal",
+      legend.text = element_text(color = "black", family = "Avenir", size = 10),
+      axis.title.y = element_blank(),
+      axis.title.x = element_text(color = "black", family = "Avenir", size = 22),
+      axis.text.y = element_text(color = "black", family = "Avenir", size = 19),
+      plot.subtitle = element_text(color = "black", family = "Avenir")
+    ) + 
+  coord_flip() +
+scale_fill_manual(values = wes_palette("GrandBudapest2", n = 4))
+    
+
+bars2 = bars |> filter(Category != "Total") |>
+  filter(Characteristic == 'Less than high school' | Characteristic == 'Some college' | Characteristic == 'College degree' |
+           Characteristic == 'High school diploma or GED') |>
+  mutate(Category = fct_recode(Category,
+                               "Substance_Use_HH" = "Substance",
+                               "Mental_Illness_HH" = "Mental",
+                               "Incarcerated_HM" = "Incarcerated"))
+
+
+
+
+educationtot2 = education |> 
+  filter(Category != "Total_Percentage") |>
+  mutate(Characteristic = fct_relevel(Characteristic, c('College degree', 'Some college', 'High school diploma or GED' , 'Less than high school')))
+
+educationplot2 = ggplot() + 
+  geom_col(data = educationtot2, aes(x = Characteristic, y = Prevalence, fill = Characteristic), position = position_dodge(0.9), color = "black", linewidth = 0.4) +
+  geom_errorbar(data = bars2, aes(ymin = LCI, ymax = UCI, x = Characteristic, group = Characteristic), position = position_dodge(0.9), width = 0.5, linewidth = 0.4) + 
+  scale_fill_manual(values = wes_palette("GrandBudapest2", n = 4)) +
+  theme_minimal() +
+  coord_flip() +
+  labs(caption = "95% CI are shown through the errorbars", y = "Prevalence (%)", title = " ") + 
+  theme(
+    legend.title = element_blank(),
+    legend.position = c(0.4, 1.1),
+    legend.direction = "horizontal",
+    legend.box = "horizontal",
+    legend.text = element_text(color = "black", family = "Avenir", size = 14),
+    axis.title.y = element_blank(),
+    axis.text = element_text(color = "black", family = "Avenir", size = 16),
+    axis.title.x = element_text(color = "black", family = "Avenir", size = 20),
+    plot.subtitle = element_text(color = "black", family = "Avenir"),
+    strip.text = element_text(color = "black", family = "Avenir", size = 14),
+    plot.title = element_text(size = 33)
+  ) + 
+  facet_wrap(~Category)
+```
+
+
+```{r fig.width=6, fig.height=5, fig.align='center'}
+educationplot1
+```
+
+**Comment on Total Prevalence by Education Group**:  
+
+* According to the National Center for Education Statistics the dropout rate from high school was 8.3% in 2010 and 5.2% in 2021, so the survey's population generally have higher prevalence of not finishing high school compared to the national average.  
+
+```{r fig.width=12, fig.height=8}
+educationplot2
+```
+
+**Comments on Prevalence by Category**:  
+
+* ACE categories for domestic violence in the household, physical abuse, sexual abuse, parental separation or divorce, substance abuse in the household, and having an incarcerated household member show a clear trend that greater prevalence results in much higher rates of dropping out of high school.  
+* Both emotional abuse and mental illness in the household show a greater prevalence of dropping out of college, but interestingly, those with higher prevalence report also having a college degree compared to it being less prevalent to report dropping out of high school.  
+* Overall, it should be noted that those reporting ACEs of physical abuse, substance abuse in the household, parental separation or divorce, and emotional abuse appear to have a significant impact on dropping out of high school because around 30% of people reporting not completing high school also report one of these ACEs which is a huge problem.  
+
+
+### Employment  
+
+Employment consists of 4 groupings:  
+
+* `Other`,  
+* `Unemployed`,  
+* `Unable to work`,  
+* `Employed`.  
+
+```{r}
+job = aces_full |> 
+  slice(27:30) |> 
+  pivot_longer(c(2, 5, 8, 11, 14, 17, 20, 23, 26), names_to = "Category", values_to = "Prevalence") |>
+  mutate(Characteristic = as.factor(Characteristic)) |> select(Category, Characteristic, Prevalence) 
+
+
+
+race1 = aces_full |> pivot_longer(c(3, 6, 9, 12, 15, 18, 21, 24, 27), names_to = "Category", values_to = "LCI") |> mutate(Characteristic = as.factor(Characteristic)) |> select(Characteristic, Category, LCI) |>
+  separate(col = Category, into = c("Category", "Stat"), sep = "_")
+
+
+race2 = aces_full |> pivot_longer(c(4, 7, 10, 13, 16, 19, 22, 25, 28), names_to = "Category", values_to = "UCI") |>
+  mutate(Characteristic = as.factor(Characteristic)) |>
+select(Characteristic, Category, UCI) |>
+  separate(col = Category, into = c("Category", "Stat"), sep = "_")
+
+
+
+bars = left_join(race1, race2, by = c("Category", "Characteristic")) |>
+  select(Characteristic, Category, LCI, UCI) 
+##|>
+  #pivot_longer(c(3:4), names_to = "Stat", values_to = "Values")
+
+bars1 = bars |> filter(Category == "Total") |>
+  filter(Characteristic == 'Employed' | Characteristic == 'Unable to work' | Characteristic == 'Unemployed' |
+           Characteristic == 'Other')
+
+
+jobtot = job |> filter(Category == "Total_Percentage") |>
+  separate(Category, into = c("Category", "Category1"), sep = "_") |>
+  ungroup() |>
+  mutate(Characteristic = fct_relevel(Characteristic, c('Employed', 'Other', 'Unable to work', 'Unemployed')))
+  
+
+
+
+jobplot1 = ggplot() + 
+  geom_col(data = jobtot, aes(x = Characteristic, y = Prevalence, fill = Characteristic), position = position_dodge(0.9), color = "black", linewidth = 0.4, show.legend = FALSE) +
+  geom_errorbar(data = bars1, aes(ymin = LCI, ymax = UCI, x = Characteristic, group = Characteristic), position = position_dodge(0.9), width = 0.5, linewidth = 0.4) +
+    labs(caption = "95% CI are shown through the errorbars", x = "Overall", y = "Prevalence (%)") + 
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(color = "black", family = "Avenir", size = 19),
+      legend.title = element_blank(),
+      legend.position = "top",
+      legend.box = "horizontal",
+      legend.direction = "horizontal",
+      legend.text = element_text(color = "black", family = "Avenir", size = 10),
+      axis.title.y = element_blank(),
+      axis.title.x = element_text(color = "black", family = "Avenir", size = 22),
+      axis.text.y = element_text(color = "black", family = "Avenir", size = 19),
+      plot.subtitle = element_text(color = "black", family = "Avenir")
+    ) + 
+  coord_flip() +
+scale_fill_manual(values = wes_palette("GrandBudapest1", n = 4))
+    
+
+bars2 = bars |> filter(Category != "Total") |>
+  filter(Characteristic == 'Employed' | Characteristic == 'Unable to work' | Characteristic == 'Unemployed' |
+           Characteristic == 'Other') |>
+  mutate(Category = fct_recode(Category,
+                               "Substance_Use_HH" = "Substance",
+                               "Mental_Illness_HH" = "Mental",
+                               "Incarcerated_HM" = "Incarcerated"))
+
+
+
+
+jobtot2 = job |> 
+  filter(Category != "Total_Percentage") |>
+  mutate(Characteristic = fct_relevel(Characteristic, c('Employed', 'Other', 'Unable to work', 'Unemployed')))
+
+jobplot2 = ggplot() + 
+  geom_col(data = jobtot2, aes(x = Characteristic, y = Prevalence, fill = Characteristic), position = position_dodge(0.9), color = "black", linewidth = 0.4) +
+  geom_errorbar(data = bars2, aes(ymin = LCI, ymax = UCI, x = Characteristic, group = Characteristic), position = position_dodge(0.9), width = 0.5, linewidth = 0.4) + 
+  scale_fill_manual(values = wes_palette("GrandBudapest1", n = 4)) +
+  theme_minimal() +
+  coord_flip() +
+  labs(caption = "95% CI are shown through the errorbars", y = "Prevalence (%)", title = " ") + 
+  theme(
+    legend.title = element_blank(),
+    legend.position = c(0.5, 1.1),
+    legend.direction = "horizontal",
+    legend.box = "horizontal",
+    legend.text = element_text(color = "black", family = "Avenir", size = 16),
+    axis.title.y = element_blank(),
+    axis.text = element_text(color = "black", family = "Avenir", size = 16),
+    axis.title.x = element_text(color = "black", family = "Avenir", size = 20),
+    plot.subtitle = element_text(color = "black", family = "Avenir"),
+    strip.text = element_text(color = "black", family = "Avenir", size = 14),
+    plot.title = element_text(size = 33)
+  ) + 
+  facet_wrap(~Category)
+```
+
+
+```{r fig.width=6, fig.height=5, fig.align='center'}
+jobplot1
+```
+
+**Comment on Total Prevalence by Employment Group**:  
+
+* The figure above shows that the majority of those in the survey are employed or other. I was unable to find anything conclusive on what the category other meant in this survey, but based on some searching the "other" category used when asked about employment often refers to self-employment or being an independent contractor.  
+
+```{r fig.width=12, fig.height=8}
+jobplot2
+```
+
+**Comments on Prevalence by Category**:  
+
+* Most categories of ACEs have those reporting unemployment or unable to work as relatively the same prevalence (i.e., domestic violence, physical abuse, and mental illness in the household), but those who have experienced adversity of emotional abuse, parental separation or divorce, or having an incarcerated household member are shown to report more unemployment compared to unable to work.  
+* Both sexual abuse and substance use in the household report higher prevalence of unable to work compared to unemployed.  
+* All ACE categories besides sexual abuse report higher prevalence of employed compared to "other" whereas those who report sexual abuse have the same prevalence for being employed compared to "other".  
+
+
+
+## Discussion and Limitations  
+
+All of the explorations done in this blog were based on visual inspection and comparison through inspection (i.e., no statistical tests were run). I do not have the original data from this study which is limiting. Another factor that should be mentioned is that this data was collected through surveys and was likely to have a response bias from the low response rate.  
+
+I have yet to see anyone do this or explore this avenue of how the type of ACE effects a person, and based on the findings, it should be further looked into how or if differing types of ACEs have different risk factors along with result in different long-term effects for the person. If we know certain populations are more at risk for certain ACEs, our goal should be targeting those populations to prevent, or limit, the ACE before it occurs.     
+
+
+
+
+
