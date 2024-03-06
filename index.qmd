@@ -1,5 +1,5 @@
 ---
-title: "Bryana's Blog"
+title: "Investigation by Bryana A.S. Thieret"
 listing:
   contents: posts
   sort: "date desc"

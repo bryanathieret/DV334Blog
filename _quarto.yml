@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "DV334Blog"
+  title: "Early-Life Stress and Impulsivity"
   navbar:
     right:
       - about.qmd
