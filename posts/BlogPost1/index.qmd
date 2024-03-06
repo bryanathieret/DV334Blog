@@ -1,0 +1,702 @@
+---
+title: "Adverse Childhood Events in the United States by State"
+author: "Bryana A.S. Thieret"
+date: "2024-02-04"
+format: 
+  html: 
+    page-layout: full
+    messages: false
+    echo: false
+    warning: false
+    fig-align: center
+categories: [news]
+---
+
+# Introduction   
+## Dataset  
+The first data set we will be exploring is data scrapped from a CDC website article named, "Prevalence of Adverse Childhood Experiences Among U.S. Adults — Behavioral Risk Factor Surveillance System, 2011–2020" and can be found [here](https://www.cdc.gov/mmwr/volumes/72/wr/mm7226a2.htm) in Table 1. This data was collected from 2011 to 2020 and is one of the most complete surveys that has currently been done in the United States on adverse childhood event prevalence.   
+
+The information scraped from the website is the summary statistics by state and categorized by adverse childhood type. More specifically, the adverse childhood events were categorized by emotional abuse, physical abuse, sexual abuse, domestic violence in the household, substance use in the household, mental illness in the household, parental separation or divorce, and incarcerated household member. Generally speaking, these are the 8 most commonly collected adverse childhood events. In addition, we also have the response rate by state and year which is an important measure to keep in mind when evaluating the data due to response bias.  
+
+**IMPORTANT DISTINCTION:** Adverse childhood experiences that are emotional abuse, physical abuse, and sexual abuse are events that happen directly to the child. In comparison, domestic violence in the household, substance use in the household, mental illness in the household, parental separation or divorce, and incarcerated household member are adverse childhood experiences where the child is present (i.e., a bystander). These events create instability and uncertainty for a child resulting in a chronic stress environment and have been shown repeatedly to increase risk for a multitude of illnesses and risky/maladaptive behaviors.  
+
+### Definitions  
+
+* This dataset has many abbreviations and could be interpreted wrong without the following operational definitions from the study expressed in questions asked (These were not the only questions asked to determine if the person experienced a specific adverse childhood event, but I hope this gives a better idea on how this was defined).    
+  - Emotional abuse (`Emotional`): 
+    1. "How often did a parent or adult in your home ever swear at you, insult you, or put you down?" (answers: never vs. at least once)  
+  - Physical abuse (`Physical`):  
+    1. "How often did your parents or adults in your home ever hit, beat, kick, or physically hurt you in any way? Do not include spanking" (answers: never vs. at least once)  
+  - Sexual abuse (`Sexual`):  
+    1. "How often did anyone at least 5 years older than you or an adult, ever try to make you touch them sexually?" (answers: never vs. at least once)  
+  - Separated/Divorced (`SeparatedDivorced`):  
+    1. "Were your parents separated or divorced?" (answers: no vs. yes)  
+  - Mental illness in the household (`Mental_Illness_HH`):  
+    1. "Did you live with anyone who was depressed, mentally ill or suicidal?" (answers: no vs. yes)  
+  - Substance Use in household (`Substance_Use_HH`):  
+    1. "Did you live with anyone who used illegal street drugs or who abused prescription medications?" (answers: no vs. yes)  
+  - Domestic violence in household (`DV`):  
+    1. "How often did your parents or adults in your home ever slap, hit, kick, punch or beat each other up?" (answers: never vs. at least once)  
+  - Incarcerated household member (`Incarcerated_HM`):  
+    1. "Did you live with anyone who served time or was sentenced to serve time in prison, jail, or other correctional facility?" (answers: no vs. yes)  
+
+    
+
+
+
+## Questions of Interest  
+When looking over this dataset, a few things I want to be the focus and in the front of our minds are,  
+
+1. Response rate is very important to keep in mind when comparing percentages of prevalence of these adverse childhood events because of response bias.  
+
+2. Which adverse childhood events are more common overall and which ones are less common?  
+
+2. Within each category of adverse childhood events, which states have the highest rate of prevalence.    
+
+
+
+```{r}
+library(tidyverse)
+library(rvest)
+library(janitor)
+library(maps)
+library(ggbeeswarm)
+library(gridExtra)
+library(paletteer)
+library(knitr)
+
+
+url = "https://www.cdc.gov/mmwr/volumes/72/wr/mm7226a2.htm"
+h = read_html(url)
+tab = h |> html_nodes("table")
+aces = tab[[1]] |> html_table()
+aces_full = aces |> row_to_names(1)
+
+
+aces_full = aces_full |> rename("state" = `Jurisdiction*`, 
+                    "year" = `Survey year`,
+                    "response_rate" = `Survey response rate, %`,
+                    "n_responses" = `Total no., unweighted`,
+                    "Emotional" = `Emotional†`,
+                    "Physical" = `Physical`,
+                    "Sexual" = `Sexual§`,
+                    "DV" = `Witnessed intimate partner violence`,
+                    "Substance_Use_HH" = `Household substance use¶`,
+                    "Mental_Illness_HH" = `Household mental illness`,
+                    "SeparationDivorce" = `Parental separation or divorce†`,
+                    "Incarcerated_HM" = `Incarcerated household member`)
+
+ace_full = aces_full |> separate(col = Emotional, into = c("Emotional", "Emotional_CI"), sep = c(" ")) |>
+  separate(col = Physical, into = c("Physical", "Physical_CI"), sep = " ") |>
+  separate(col = Sexual, into = c("Sexual", "Sexual_CI"), sep = "\\(") |>
+  separate(col = DV, into = c("DV", "DV_CI"), sep = " ") |>
+  separate(col = Substance_Use_HH, into = c("Substance_Use_HH", "Substance_Use_HH_CI"), sep = " ") |>
+  separate(col = Mental_Illness_HH, into = c("Mental_Illness_HH", "Mental_Illness_HH_CI"), sep = " ") |>
+  separate(col = SeparationDivorce, into = c("SeparationDivorce", "SeparationDivorce_CI"), sep = " ") |>
+  separate(col = Incarcerated_HM, into = c("Incarcerated_HM", "Incarcerated_HM_CI"), sep = " ") |>
+    mutate(Emotional = as.numeric(Emotional),
+         Physical = as.numeric(Physical),
+         Sexual = as.numeric(Sexual)) 
+
+ace_subset = ace_full |> select(year, response_rate, n_responses, Emotional, Physical, Sexual, DV, Substance_Use_HH, Mental_Illness_HH, SeparationDivorce, Incarcerated_HM, state) |>
+  mutate(Emotional = as.numeric(Emotional),
+         Physical = as.numeric(Physical),
+         Sexual = as.numeric(Sexual), 
+         DV = as.numeric(DV),
+         Substance_Use_HH = as.numeric(Substance_Use_HH),
+         Mental_Illness_HH = as.numeric(Mental_Illness_HH),
+         SeparationDivorce = as.numeric(SeparationDivorce),
+         Incarcerated_HM = as.numeric(Incarcerated_HM),
+         response_rate = as.numeric(response_rate)
+         
+  ) |> 
+  mutate(state = str_to_lower(state))
+
+state_df <- ggplot2::map_data("state")
+ace_state <- left_join(state_df, ace_subset, by = c("region" = "state"))
+
+```
+
+
+# Exploratory Analysis
+
+## Response Rate  
+
+* A "good" response rate is about 95%, but because this is a very sensitive topic we see a much lower response rate. The reason why response rate is important to keep in mind is because you are more likely to have response bias in your data (i.e., those who are passionate or care about responding do respond and those who don't care do not leaving the data biased). This is just something we should keep in mind as we look at the data because states with a response rate of 40% are going to have a different bias level compared to states with a response rate of 60%.  
+* This map shows that there was higher response rates from states in the middle of the country compared to the states on the west or east coast. Mississippi had by far the highest response rate compared to all other states.  
+
+
+```{r output = FALSE}
+zeroa = ace_state |> ggplot(aes(x = long, y = lat, group = group)) +
+  geom_polygon(colour = "black", aes(fill = response_rate)) +
+  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
+  theme_void() +
+  scale_fill_distiller(palette = 8, direction = 1) +
+  labs(title ='Response Rate') +
+  theme(
+    legend.text = element_text(color = "black", family = "Avenir", size = 14),
+    legend.title = element_blank(),
+    title = element_text(color = "black", family = "Avenir", size = 14),
+    legend.position = c(0.5, 0.95),
+    legend.direction = "horizontal"
+  )
+
+ace_subset1 = ace_subset |> mutate(state = fct_reorder(state, response_rate))
+
+zerob = ace_subset1 |> ggplot(aes(x = state, y = response_rate)) + 
+  geom_segment(aes(x = state, xend = state, y = 0, yend = response_rate)) +
+  geom_point() +
+  coord_flip() +
+  labs(y = "Response Rate") +
+    theme_minimal() +
+  theme(
+    axis.title.y = element_blank(),
+    axis.title.x = element_text(color = "black", size = 20, family = "Avenir"),
+    axis.text.x = element_text(color = "black", size = 19, family = "Avenir"), 
+    axis.text.y = element_text(color = "black", size = 16, family = "Avenir"))
+```
+
+
+```{r fig.width=15, fig.height= 12}
+grid.arrange(zeroa, zerob, nrow = 1)
+```
+
+
+
+
+## General Prevalence of ACEs by Category/Type  
+
+### Percentage Reported by State
+```{r fig.width=12, fig.height=8}
+ace_better = ace_subset |> 
+  pivot_longer(c(4:11), names_to = "Category", values_to = "Percentage") |>
+  mutate(Category = fct_reorder(Category, Percentage))
+
+ace_better1 = ace_better |> 
+  group_by(Category) |> filter(!is.na(Percentage)) |>
+  summarise(mean = mean(Percentage),
+            median = median(Percentage),
+            sd = sd(Percentage)) |> 
+  mutate(Category = fct_reorder(Category, mean))
+  
+  
+ace_better |> ggplot(aes(x = Percentage, y = Category, col = Category)) + 
+  geom_beeswarm(cex = 1.4, size = 3) +
+  theme_classic() +
+  scale_color_manual(values = c("#ebac23", "#b80058", "#008cf9", "#006e00", "#00bbad", "#d163e6", "#ff9287", "#5954d6")) + 
+  labs(x = "Percent Prevalence", caption = "Each point represents a state. HH = household. HM = household member. DV = domestic violence.") +
+  theme(
+    axis.title.y = element_text(color = "black", size = 20, family = "Avenir"),
+    axis.title.x = element_text(color = "black", size = 20, family = "Avenir"),
+    axis.text.x = element_text(color = "black", size = 19, family = "Avenir"), 
+    axis.text.y = element_text(color = "black", size = 16, family = "Avenir"),
+    legend.position = "top", 
+    legend.title = element_blank(),
+    legend.text = element_text(color = "black", size = 15, family = "Avenir"),
+    plot.caption = element_text(color = "black", size = 10, family = "Avenir")
+  )
+```
+
+
+### Proportion Reported by State  
+
+* Using a proportion might be helpful in this case since we have different percentages of response rates by state.   
+
+By state, $X$ being one of the 8 categories of reported adverse childhood events,  
+$$X_{Proportion} = \frac{X\%}{(Emotional\% + Physical\% + SeparationDivorce\% + SubstanceUse\% + MentalIllness\% + DV\% + Sexual\% + Incarcerated\%)}$$  
+
+\ 
+\ 
+\ 
+\ 
+
+
+```{r fig.width=12, fig.height=8}
+ace1 = ace_subset |> 
+  pivot_longer(c(4:11), names_to = "Category", values_to = "Percentage") |>
+  group_by(state, Category) |> summarise(sum = sum(Percentage)) |>
+  ungroup() |>
+  group_by(state) |> 
+  mutate(sum0 = sum(sum)) |>
+  mutate(proportion = sum/sum0) 
+
+ace1 = ace1 |> ungroup() |> mutate(Category = fct_reorder(Category, proportion))
+
+ace1 |> ggplot(aes(x = proportion, y = Category, col = Category)) + 
+  geom_beeswarm(cex = 1.4, size = 3) +
+  theme_classic() +
+  scale_color_manual(values = c("#ebac23", "#b80058", "#008cf9", "#006e00", "#00bbad", "#d163e6", "#ff9287", "#5954d6")) + 
+  labs(x = "Proportion of Prevalence", caption = "Each point represents a state. HH = household. HM = household member. DV = domestic violence.") +
+  theme(
+    axis.title.y = element_text(color = "black", size = 20, family = "Avenir"),
+    axis.title.x = element_text(color = "black", size = 20, family = "Avenir"),
+    axis.text.x = element_text(color = "black", size = 19, family = "Avenir"), 
+    axis.text.y = element_text(color = "black", size = 16, family = "Avenir"),
+    legend.position = "top", 
+    legend.title = element_blank(),
+    legend.text = element_text(color = "black", size = 15, family = "Avenir"),
+    plot.caption = element_text(color = "black", size = 10, family = "Avenir"))
+
+```
+
+
+
+
+
+
+
+
+### Emotional Abuse  
+
+* Emotional abuse was the most prevalent adverse childhood experience reported. On the emotional abuse prevalence map by state, we see a general pattern that emotional abuse is reported more on the west coast compared to the east coast. 
+
+```{r emotional abuse, output = FALSE}
+# emotional map
+
+onea = ace_state |> ggplot(aes(x = long, y = lat, group = group)) +
+  geom_polygon(colour = "black", aes(fill = Emotional)) +
+  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
+  theme_void() +
+  scale_fill_gradient(low = "ivory", high = "#5954d6") +
+  labs(fill='Emotional Abuse', title = "Emotional Abuse") +
+  theme(
+    legend.text = element_text(color = "black", family = "Avenir", size = 14),
+    legend.title = element_blank(),
+    title = element_text(color = "black", family = "Avenir", size = 14),
+    legend.position = c(0.5, 0.95),
+    legend.direction = "horizontal"
+  )
+
+
+emotional_10 = ace_subset |> select(state, Emotional) |> arrange(desc(Emotional)) 
+
+quantile(emotional_10$Emotional, probs = c(0.75, 1), na.rm = TRUE)
+
+emotional_top = emotional_10 |> filter(Emotional > 36.15) |> 
+  mutate(state = fct_reorder(state, Emotional))
+
+
+oneb = emotional_top |> ggplot(aes(x = state, y = Emotional)) + 
+  geom_col(fill = "#5954d6", color = "black") + 
+  coord_flip() +
+  theme_classic() +
+  labs(y = "Percentage of Emotional Abuse", x = "State", title = "States Above 75th Percentile for Emotional Abuse") +
+  theme(
+    axis.title.y = element_text(color = "black", size = 15, family = "Avenir"),
+    axis.title.x = element_text(color = "black", size = 15, family = "Avenir"),
+    title = element_text(color = "black", size = 12, family = "Avenir"),
+    axis.text.x = element_text(color = "black", size = 14, family = "Avenir"), 
+    axis.text.y = element_text(color = "black", size = 13, family = "Avenir"),
+  )
+```
+
+```{r fig.width=15, fig.height=6}
+grid.arrange(onea, oneb, nrow = 1)
+```
+
+
+### Separation/Divorce  
+
+* On the separation or divorce prevalence map by state, we see a general trend of a higher concentration of separations and divorces in the southeast.  
+
+```{r separationdivorce, output = FALSE}
+# separation or divorce map
+
+twoa = ace_state |> ggplot(aes(x = long, y = lat, group = group)) +
+  geom_polygon(colour = "black", aes(fill = SeparationDivorce)) +
+  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
+  theme_void() +
+  scale_fill_gradient(low = "ivory", high = "#ff9287") +
+  labs(title ='Separation/Divorce') +
+  theme(
+    legend.text = element_text(color = "black", family = "Avenir", size = 14),
+    legend.title = element_blank(),
+    title = element_text(color = "black", family = "Avenir", size = 14),
+    legend.position = c(0.5, 0.95),
+    legend.direction = "horizontal"
+  )
+
+
+
+separation = ace_subset |> select(state, SeparationDivorce)
+
+quantile(separation$SeparationDivorce, probs = c(0.75, 1), na.rm = TRUE)
+
+separation_top = separation |> filter(SeparationDivorce > 31.6) |> 
+  mutate(state = fct_reorder(state, SeparationDivorce))
+
+
+twob = separation_top |> ggplot(aes(x = state, y = SeparationDivorce)) + 
+  geom_col(fill = "#ff9287", color = "black") + 
+  coord_flip() +
+  theme_classic() +
+  labs(y = "Percentage of Separation/Divorce", x = "State", title = "States Above 75th Percentile for Separation/Divorce") +
+  theme(
+    axis.title.y = element_text(color = "black", size = 15, family = "Avenir"),
+    axis.title.x = element_text(color = "black", size = 15, family = "Avenir"),
+    title = element_text(color = "black", size = 12, family = "Avenir"),
+    axis.text.x = element_text(color = "black", size = 14, family = "Avenir"), 
+    axis.text.y = element_text(color = "black", size = 13, family = "Avenir"),
+  )
+```
+
+
+```{r fig.width=15, fig.height=6}
+grid.arrange(twoa, twob, nrow = 1)
+```
+
+
+
+## Substance Use in the Household  
+
+* On prevalence of substance use in the household, there looks to be a general prevalence overall of 25%, but greater prevalence in the northwest (not exclusively).  
+
+```{r substance use, output = FALSE}
+# substance map 
+
+
+threea = ace_state |> ggplot(aes(x = long, y = lat, group = group)) +
+  geom_polygon(colour = "black", aes(fill = Substance_Use_HH)) +
+  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
+  theme_void() +
+  scale_fill_gradient(low = "ivory", high = "#d163e6") +
+  labs(title ='Substance Use in Household') +
+  theme(
+    legend.text = element_text(color = "black", family = "Avenir", size = 14),
+    legend.title = element_blank(),
+    title = element_text(color = "black", family = "Avenir", size = 14),
+    legend.position = c(0.6, 0.95),
+    legend.direction = "horizontal"
+  )
+
+
+
+
+substance = ace_subset |> select(state, Substance_Use_HH)
+
+quantile(substance$Substance_Use_HH, probs = c(0.75, 1), na.rm = TRUE)
+
+substance_top = substance |> filter(Substance_Use_HH > 29.35) |> 
+  mutate(state = fct_reorder(state, Substance_Use_HH))
+
+threeb = substance_top |> ggplot(aes(x = state, y = Substance_Use_HH)) + 
+  geom_col(fill = "#d163e6", color = "black") + 
+  coord_flip() +
+  theme_classic() +
+  labs(y = "Percentage of Substance Use in Household", x = "State", title = "States Above 75th Percentile for Substance Use in Household") +
+  theme(
+    axis.title.y = element_text(color = "black", size = 15, family = "Avenir"),
+    axis.title.x = element_text(color = "black", size = 15, family = "Avenir"),
+    title = element_text(color = "black", size = 12, family = "Avenir"),
+    axis.text.x = element_text(color = "black", size = 14, family = "Avenir"), 
+    axis.text.y = element_text(color = "black", size = 13, family = "Avenir"),
+  )
+```
+
+
+```{r fig.width=15, fig.height=6}
+grid.arrange(threea, threeb, nrow = 1)
+```
+
+
+### Physical Abuse  
+
+* Prevalence of physical abuse shown through the map appears to be greater in the southwest. 
+
+```{r physical abuse, output = FALSE}
+# physical abuse map
+
+
+foura = ace_state |> ggplot(aes(x = long, y = lat, group = group)) +
+  geom_polygon(colour = "black", aes(fill = Physical)) +
+  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
+  theme_void() +
+  scale_fill_gradient(low = "ivory", high = "#00bbad") +
+  labs(title ='Physical Abuse') +
+  theme(
+    legend.text = element_text(color = "black", family = "Avenir", size = 14),
+    legend.title = element_blank(),
+    title = element_text(color = "black", family = "Avenir", size = 14),
+    legend.position = c(0.5, 0.95),
+    legend.direction = "horizontal"
+  )
+
+
+physical = ace_subset |> select(state, Physical)
+
+quantile(physical$Physical, probs = c(0.75, 1), na.rm = TRUE)
+
+physical_top = physical |> filter(Physical > 24.9) |> 
+  mutate(state = fct_reorder(state, Physical))
+
+
+fourb = physical_top |> ggplot(aes(x = state, y = Physical)) + 
+  geom_col(fill = "#00bbad", color = "black") + 
+  coord_flip() +
+  theme_classic() +
+  labs(y = "Percentage of Physical Abuse", x = "State", title = "States Above 75th Percentile for Physical Abuse") +
+  theme(
+    axis.title.y = element_text(color = "black", size = 15, family = "Avenir"),
+    axis.title.x = element_text(color = "black", size = 15, family = "Avenir"),
+    title = element_text(color = "black", size = 12, family = "Avenir"),
+    axis.text.x = element_text(color = "black", size = 14, family = "Avenir"), 
+    axis.text.y = element_text(color = "black", size = 13, family = "Avenir"),
+  )
+```
+
+
+```{r fig.width=15, fig.height=6}
+grid.arrange(foura, fourb, nrow = 1)
+```
+
+
+
+
+### Mental Illness in Household  
+
+* This map graph is interesting because it appears mental illness in the household is most prevalent in a much greater way in Utah compared to all other states.   
+
+```{r mental illness, output = FALSE}
+# mental illness map
+
+fivea = ace_state |> ggplot(aes(x = long, y = lat, group = group)) +
+  geom_polygon(colour = "black", aes(fill = Mental_Illness_HH)) +
+  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
+  theme_void() +
+  scale_fill_gradient(low = "ivory", high = "#006e00") +
+  labs(title ='Mental Illness in Household') +
+  theme(
+    legend.text = element_text(color = "black", family = "Avenir", size = 14),
+    legend.title = element_blank(),
+    title = element_text(color = "black", family = "Avenir", size = 14),
+    legend.position = c(0.5, 0.95),
+    legend.direction = "horizontal"
+  )
+
+
+
+mental = ace_subset |> select(state, Mental_Illness_HH)
+
+quantile(mental$Mental_Illness_HH, probs = c(0.75, 1), na.rm = TRUE)
+
+mental_top = mental |> filter(Mental_Illness_HH > 20.4) |> 
+  mutate(state = fct_reorder(state, Mental_Illness_HH))
+
+fiveb = mental_top |> ggplot(aes(x = state, y = Mental_Illness_HH)) + 
+  geom_col(fill = "#006e00", color = "black") + 
+  coord_flip() +
+  theme_classic() +
+  labs(y = "Percentage of Mental Illness in Household", x = "State", title = "States Above 75th Percentile for Mental Illness in Household") +
+  theme(
+    axis.title.y = element_text(color = "black", size = 15, family = "Avenir"),
+    axis.title.x = element_text(color = "black", size = 15, family = "Avenir"),
+    title = element_text(color = "black", size = 12, family = "Avenir"),
+    axis.text.x = element_text(color = "black", size = 14, family = "Avenir"), 
+    axis.text.y = element_text(color = "black", size = 13, family = "Avenir"),
+  )
+```
+
+
+```{r fig.width=15, fig.height=6}
+grid.arrange(fivea, fiveb, nrow = 1)
+```
+
+
+
+### Domestic Violence in Household  
+
+* Interestingly, in this map we see Nevada stand out as having a much greater percentage of domestic violence compared to all other states.  
+
+
+```{r output = FALSE}
+# dv map
+
+sixa = ace_state |> ggplot(aes(x = long, y = lat, group = group)) +
+  geom_polygon(colour = "black", aes(fill = DV)) +
+  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
+  theme_void() +
+  scale_fill_gradient(low = "ivory", high = "#008cf9") +
+  labs(title='Domestic Violence in Household') +
+  theme(
+    legend.text = element_text(color = "black", family = "Avenir", size = 14),
+    legend.title = element_blank(),
+    title = element_text(color = "black", family = "Avenir", size = 14),
+    legend.position = c(0.65, 0.95),
+    legend.direction = "horizontal"
+  ) +
+  guides(fill = guide_colourbar(barwidth = 10))
+
+
+dv = ace_subset |> select(state, DV)
+
+quantile(dv$DV, probs = c(0.75, 1), na.rm = TRUE)
+
+dv_top = dv |> filter(DV > 17.95) |> 
+  mutate(state = fct_reorder(state, DV))
+
+sixb = dv_top |> ggplot(aes(x = state, y = DV)) + 
+  geom_col(fill = "#008cf9", color = "black") + 
+  coord_flip() +
+  theme_classic() +
+  labs(y = "Percentage of Domestic Violence", x = "State", title = "States Above 75th Percentile for Domestic Violence") +
+  theme(
+    axis.title.y = element_text(color = "black", size = 15, family = "Avenir"),
+    axis.title.x = element_text(color = "black", size = 15, family = "Avenir"),
+    title = element_text(color = "black", size = 12, family = "Avenir"),
+    axis.text.x = element_text(color = "black", size = 14, family = "Avenir"), 
+    axis.text.y = element_text(color = "black", size = 13, family = "Avenir"),
+  )
+```
+
+
+```{r fig.width=15, fig.height=6}
+grid.arrange(sixa, sixb, nrow = 1)
+```
+
+
+
+
+### Sexual Abuse  
+
+* Oregon stands out as having a larger percentage of sexual abuse occur compared to all other states. 
+
+
+```{r output = FALSE}
+# sexual map 
+
+sevena = ace_state |> ggplot(aes(x = long, y = lat, group = group)) +
+  geom_polygon(colour = "black", aes(fill = Sexual)) +
+  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
+  theme_void() +
+  scale_fill_gradient(low = "ivory", high = "#b80058") +
+  labs(title ='Sexual Abuse') +
+  theme(
+    legend.text = element_text(color = "black", family = "Avenir", size = 14),
+    legend.title = element_blank(),
+    title = element_text(color = "black", family = "Avenir", size = 14),
+    legend.position = c(0.5, 0.95),
+    legend.direction = "horizontal"
+  ) +
+  guides(fill = guide_colourbar(barwidth = 7))
+
+sexual = ace_subset |> select(state, Sexual)
+
+quantile(sexual$Sexual, probs = c(0.75, 1), na.rm = TRUE)
+
+sexual_top = sexual |> filter(Sexual > 14.15) |> 
+  mutate(state = fct_reorder(state, Sexual))
+
+sevenb = sexual_top |> ggplot(aes(x = state, y = Sexual)) + 
+  geom_col(fill = "#b80058", color = "black") + 
+  coord_flip() +
+  theme_classic() +
+  labs(y = "Percentage of Sexual Abuse", x = "State", title = "States Above 75th Percentile for Sexual Abuse") +
+  theme(
+    axis.title.y = element_text(color = "black", size = 15, family = "Avenir"),
+    axis.title.x = element_text(color = "black", size = 15, family = "Avenir"),
+    title = element_text(color = "black", size = 12, family = "Avenir"),
+    axis.text.x = element_text(color = "black", size = 14, family = "Avenir"), 
+    axis.text.y = element_text(color = "black", size = 13, family = "Avenir"),
+  )
+```
+
+```{r fig.width=15, fig.height=6}
+grid.arrange(sevena, sevenb, nrow = 1)
+```
+
+
+### Incarcerated Household Member  
+
+* In the map, we see a trend of higher percentages of a household member being incarcerated in the southeast region. This generally makes sense because those states have a tendency to have a higher percentage of residences that are people of color, and due to systemic racism, those with a darker complexion are more likely to be incarcerated wrongfully or for petty crimes compared to white people.  
+
+```{r output = FALSE}
+# incarcerated household member map
+
+eighta = ace_state |> ggplot(aes(x = long, y = lat, group = group)) +
+  geom_polygon(colour = "black", aes(fill = Incarcerated_HM)) +
+  coord_map(projection = "albers", lat0 = 39, lat1 = 45) +
+  theme_void() +
+  scale_fill_gradient(low = "ivory", high = "#ebac23") + 
+labs(title='Incarcerated Household Member') +
+  theme(
+    legend.text = element_text(color = "black", family = "Avenir", size = 14),
+    legend.title = element_blank(),
+    title = element_text(color = "black", family = "Avenir", size = 14),
+    legend.position = c(0.65, 0.95),
+    legend.direction = "horizontal"
+  )
+
+
+incarcerated = ace_subset |> select(state, Incarcerated_HM)
+
+quantile(incarcerated$Incarcerated_HM, probs = c(0.75, 1), na.rm = TRUE)
+
+incarcerated_top = incarcerated |> filter(Incarcerated_HM > 10.25) |> 
+  mutate(state = fct_reorder(state, Incarcerated_HM))
+
+eightb = incarcerated_top |> ggplot(aes(x = state, y = Incarcerated_HM)) + 
+  geom_col(fill = "#ebac23", color = "black") + 
+  coord_flip() +
+  theme_classic() +
+  labs(y = "Percent of Incarcerated HM", x = "State", title = "States Above 75th Percentile for Incarcerated HM") +
+  theme(
+    axis.title.y = element_text(color = "black", size = 15, family = "Avenir"),
+    axis.title.x = element_text(color = "black", size = 15, family = "Avenir"),
+    title = element_text(color = "black", size = 12, family = "Avenir"),
+    axis.text.x = element_text(color = "black", size = 14, family = "Avenir"), 
+    axis.text.y = element_text(color = "black", size = 13, family = "Avenir"),
+  )
+
+```
+
+
+```{r fig.width=15, fig.height=6}
+grid.arrange(eighta, eightb, nrow = 1)
+```
+
+### States Above 75th Percentile     
+
+Something I noticed when doing this is that many of the states above the 75th percentile for a specific adverse childhood event prevalence showed up multiple times. To evaluate this further I decided to do the graph below which shows all the states that were included in at least one 75th percentile dataset to evaluate exactly how many times specific states showed up in the 75th percentile across different adverse childhood events.   
+
+In a sense, it does make sense that if a state had shown up once in a 75th percentile datasets that they would most likely show up again because instability leads to more instability. This visual, in my opinion, shows a real problem occurring within certain states. 
+
+
+```{r fig.height=12, fig.width=15}
+bad0 = full_join(full_join(full_join(full_join(full_join(full_join(full_join(emotional_top, sexual_top), physical_top), dv_top), mental_top), substance_top), incarcerated_top), separation_top) |> pivot_longer(c(2:9), values_to = "Percent", names_to = "Category") |> mutate(not0 = if_else(Percent != 0, 1, 0)) |> select(-Percent)
+  
+bad = full_join(full_join(full_join(full_join(full_join(full_join(full_join(emotional_top, sexual_top), physical_top), dv_top), mental_top), substance_top), incarcerated_top), separation_top) |> pivot_longer(c(2:9), values_to = "Percent", names_to = "Category") |> mutate(not0 = if_else(Percent != 0, 1, 0)) |> filter(!is.na(not0)) |> group_by(state) |> summarise(sum = sum(not0)) |> mutate(state = fct_reorder(state, sum))
+
+
+bad2 = left_join(bad0, bad)
+bad2 = bad2 |> mutate(state = fct_reorder(state, sum))
+
+bad2 |> ggplot(aes(x = state, y = not0, fill = Category)) + 
+  geom_col(color = "black") +
+  coord_flip() +
+  scale_fill_manual(limits = c("Incarcerated_HM", "Sexual", "DV", "Mental_Illness_HH", "Physical", "Substance_Use_HH", "SeparationDivorce", "Emotional"), values = c("#ebac23", "#b80058", "#008cf9", "#006e00", "#00bbad", "#d163e6", "#ff9287", "#5954d6")) +
+  theme_classic() +
+  labs(y = "Number of Categories", caption = "Each point represents a state. HH = household. HM = household member. DV = domestic violence.") +
+  theme(
+    axis.title.y = element_blank(),
+    axis.title.x = element_text(color = "black", size = 20, family = "Avenir"),
+    title = element_text(color = "black", size = 12, family = "Avenir"),
+    axis.text.x = element_text(color = "black", size = 19, family = "Avenir"), 
+    axis.text.y = element_text(color = "black", size = 19, family = "Avenir"),
+    legend.title = element_blank(),
+    legend.text = element_text(color = "black", size = 14, family = "Avenir"),
+    legend.position = "top",
+    plot.caption = element_text(color = "black", size = 10, family = "Avenir")
+  )
+```
+
+
+
+# Discussion & Limitations  
+
+This exploratory analysis evaluated the prevalence of different adverse childhood events both generally in the US and by state. Due to my extensive research in this area, I was not too surprised with the findings for prevalence overall, but was surprised when looking by state. It is always upsetting to look at this because the long-term effects of adverse childhood events are increased risk for chronic physical illness, debilitating mental illness, alcohol use disorder, substance use disorder, shorter lifespan, and much more, but in the US we only care about an issue when it is about to kill you and not prevent it to begin with.  
+
+There are a multitude of limitations to this exploratory analysis with the biggest being low response rate which we know leads to increase in response bias. In addition, this analysis was simply by state prevalence and did not include any demographics of the participants (Table 2 of the article). Due to this, I will put a precautionary warning here that acknowledges for everyone that there is ample evidence that those who experience the most adverse childhood events are those living in low-income urban areas which often consists of majority people of color (Maguire-Jack et al., 2021).  
+
+
+
+
