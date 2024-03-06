@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Bryana A.S. Thieret">
+<meta name="dcterms.date" content="2024-02-04">
+
+<title>Bryana’s Blog - Adverse Childhood Events in the United States by State</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">DV334Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/bryanathieret"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content column-page" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Adverse Childhood Events in the United States by State</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">news</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta column-page">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Bryana A.S. Thieret </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 4, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<section id="dataset" class="level2">
+<h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
+<p>The first data set we will be exploring is data scrapped from a CDC website article named, “Prevalence of Adverse Childhood Experiences Among U.S. Adults — Behavioral Risk Factor Surveillance System, 2011–2020” and can be found <a href="https://www.cdc.gov/mmwr/volumes/72/wr/mm7226a2.htm">here</a> in Table 1. This data was collected from 2011 to 2020 and is one of the most complete surveys that has currently been done in the United States on adverse childhood event prevalence.</p>
+<p>The information scraped from the website is the summary statistics by state and categorized by adverse childhood type. More specifically, the adverse childhood events were categorized by emotional abuse, physical abuse, sexual abuse, domestic violence in the household, substance use in the household, mental illness in the household, parental separation or divorce, and incarcerated household member. Generally speaking, these are the 8 most commonly collected adverse childhood events. In addition, we also have the response rate by state and year which is an important measure to keep in mind when evaluating the data due to response bias.</p>
+<p><strong>IMPORTANT DISTINCTION:</strong> Adverse childhood experiences that are emotional abuse, physical abuse, and sexual abuse are events that happen directly to the child. In comparison, domestic violence in the household, substance use in the household, mental illness in the household, parental separation or divorce, and incarcerated household member are adverse childhood experiences where the child is present (i.e., a bystander). These events create instability and uncertainty for a child resulting in a chronic stress environment and have been shown repeatedly to increase risk for a multitude of illnesses and risky/maladaptive behaviors.</p>
+<section id="definitions" class="level3">
+<h3 class="anchored" data-anchor-id="definitions">Definitions</h3>
+<ul>
+<li>This dataset has many abbreviations and could be interpreted wrong without the following operational definitions from the study expressed in questions asked (These were not the only questions asked to determine if the person experienced a specific adverse childhood event, but I hope this gives a better idea on how this was defined).
+<ul>
+<li>Emotional abuse (<code>Emotional</code>):
+<ol type="1">
+<li>“How often did a parent or adult in your home ever swear at you, insult you, or put you down?” (answers: never vs.&nbsp;at least once)<br>
+</li>
+</ol></li>
+<li>Physical abuse (<code>Physical</code>):
+<ol type="1">
+<li>“How often did your parents or adults in your home ever hit, beat, kick, or physically hurt you in any way? Do not include spanking” (answers: never vs.&nbsp;at least once)<br>
+</li>
+</ol></li>
+<li>Sexual abuse (<code>Sexual</code>):
+<ol type="1">
+<li>“How often did anyone at least 5 years older than you or an adult, ever try to make you touch them sexually?” (answers: never vs.&nbsp;at least once)<br>
+</li>
+</ol></li>
+<li>Separated/Divorced (<code>SeparatedDivorced</code>):
+<ol type="1">
+<li>“Were your parents separated or divorced?” (answers: no vs.&nbsp;yes)<br>
+</li>
+</ol></li>
+<li>Mental illness in the household (<code>Mental_Illness_HH</code>):
+<ol type="1">
+<li>“Did you live with anyone who was depressed, mentally ill or suicidal?” (answers: no vs.&nbsp;yes)<br>
+</li>
+</ol></li>
+<li>Substance Use in household (<code>Substance_Use_HH</code>):
+<ol type="1">
+<li>“Did you live with anyone who used illegal street drugs or who abused prescription medications?” (answers: no vs.&nbsp;yes)<br>
+</li>
+</ol></li>
+<li>Domestic violence in household (<code>DV</code>):
+<ol type="1">
+<li>“How often did your parents or adults in your home ever slap, hit, kick, punch or beat each other up?” (answers: never vs.&nbsp;at least once)<br>
+</li>
+</ol></li>
+<li>Incarcerated household member (<code>Incarcerated_HM</code>):
+<ol type="1">
+<li>“Did you live with anyone who served time or was sentenced to serve time in prison, jail, or other correctional facility?” (answers: no vs.&nbsp;yes)</li>
+</ol></li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="questions-of-interest" class="level2">
+<h2 class="anchored" data-anchor-id="questions-of-interest">Questions of Interest</h2>
+<p>When looking over this dataset, a few things I want to be the focus and in the front of our minds are,</p>
+<ol type="1">
+<li><p>Response rate is very important to keep in mind when comparing percentages of prevalence of these adverse childhood events because of response bias.</p></li>
+<li><p>Which adverse childhood events are more common overall and which ones are less common?</p></li>
+<li><p>Within each category of adverse childhood events, which states have the highest rate of prevalence.</p></li>
+</ol>
+</section>
+</section>
+<section id="exploratory-analysis" class="level1">
+<h1>Exploratory Analysis</h1>
+<section id="response-rate" class="level2">
+<h2 class="anchored" data-anchor-id="response-rate">Response Rate</h2>
+<ul>
+<li>A “good” response rate is about 95%, but because this is a very sensitive topic we see a much lower response rate. The reason why response rate is important to keep in mind is because you are more likely to have response bias in your data (i.e., those who are passionate or care about responding do respond and those who don’t care do not leaving the data biased). This is just something we should keep in mind as we look at the data because states with a response rate of 40% are going to have a different bias level compared to states with a response rate of 60%.<br>
+</li>
+<li>This map shows that there was higher response rates from states in the middle of the country compared to the states on the west or east coast. Mississippi had by far the highest response rate compared to all other states.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="general-prevalence-of-aces-by-categorytype" class="level2">
+<h2 class="anchored" data-anchor-id="general-prevalence-of-aces-by-categorytype">General Prevalence of ACEs by Category/Type</h2>
+<section id="percentage-reported-by-state" class="level3">
+<h3 class="anchored" data-anchor-id="percentage-reported-by-state">Percentage Reported by State</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="proportion-reported-by-state" class="level3">
+<h3 class="anchored" data-anchor-id="proportion-reported-by-state">Proportion Reported by State</h3>
+<ul>
+<li>Using a proportion might be helpful in this case since we have different percentages of response rates by state.</li>
+</ul>
+<p>By state, <span class="math inline">\(X\)</span> being one of the 8 categories of reported adverse childhood events,<br>
+<span class="math display">\[X_{Proportion} = \frac{X\%}{(Emotional\% + Physical\% + SeparationDivorce\% + SubstanceUse\% + MentalIllness\% + DV\% + Sexual\% + Incarcerated\%)}\]</span></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="emotional-abuse" class="level3">
+<h3 class="anchored" data-anchor-id="emotional-abuse">Emotional Abuse</h3>
+<ul>
+<li>Emotional abuse was the most prevalent adverse childhood experience reported. On the emotional abuse prevalence map by state, we see a general pattern that emotional abuse is reported more on the west coast compared to the east coast.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="separationdivorce" class="level3">
+<h3 class="anchored" data-anchor-id="separationdivorce">Separation/Divorce</h3>
+<ul>
+<li>On the separation or divorce prevalence map by state, we see a general trend of a higher concentration of separations and divorces in the southeast.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="substance-use-in-the-household" class="level2">
+<h2 class="anchored" data-anchor-id="substance-use-in-the-household">Substance Use in the Household</h2>
+<ul>
+<li>On prevalence of substance use in the household, there looks to be a general prevalence overall of 25%, but greater prevalence in the northwest (not exclusively).</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="physical-abuse" class="level3">
+<h3 class="anchored" data-anchor-id="physical-abuse">Physical Abuse</h3>
+<ul>
+<li>Prevalence of physical abuse shown through the map appears to be greater in the southwest.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="mental-illness-in-household" class="level3">
+<h3 class="anchored" data-anchor-id="mental-illness-in-household">Mental Illness in Household</h3>
+<ul>
+<li>This map graph is interesting because it appears mental illness in the household is most prevalent in a much greater way in Utah compared to all other states.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="domestic-violence-in-household" class="level3">
+<h3 class="anchored" data-anchor-id="domestic-violence-in-household">Domestic Violence in Household</h3>
+<ul>
+<li>Interestingly, in this map we see Nevada stand out as having a much greater percentage of domestic violence compared to all other states.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sexual-abuse" class="level3">
+<h3 class="anchored" data-anchor-id="sexual-abuse">Sexual Abuse</h3>
+<ul>
+<li>Oregon stands out as having a larger percentage of sexual abuse occur compared to all other states.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="incarcerated-household-member" class="level3">
+<h3 class="anchored" data-anchor-id="incarcerated-household-member">Incarcerated Household Member</h3>
+<ul>
+<li>In the map, we see a trend of higher percentages of a household member being incarcerated in the southeast region. This generally makes sense because those states have a tendency to have a higher percentage of residences that are people of color, and due to systemic racism, those with a darker complexion are more likely to be incarcerated wrongfully or for petty crimes compared to white people.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="states-above-75th-percentile" class="level3">
+<h3 class="anchored" data-anchor-id="states-above-75th-percentile">States Above 75th Percentile</h3>
+<p>Something I noticed when doing this is that many of the states above the 75th percentile for a specific adverse childhood event prevalence showed up multiple times. To evaluate this further I decided to do the graph below which shows all the states that were included in at least one 75th percentile dataset to evaluate exactly how many times specific states showed up in the 75th percentile across different adverse childhood events.</p>
+<p>In a sense, it does make sense that if a state had shown up once in a 75th percentile datasets that they would most likely show up again because instability leads to more instability. This visual, in my opinion, shows a real problem occurring within certain states.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="1440"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="discussion-limitations" class="level1">
+<h1>Discussion &amp; Limitations</h1>
+<p>This exploratory analysis evaluated the prevalence of different adverse childhood events both generally in the US and by state. Due to my extensive research in this area, I was not too surprised with the findings for prevalence overall, but was surprised when looking by state. It is always upsetting to look at this because the long-term effects of adverse childhood events are increased risk for chronic physical illness, debilitating mental illness, alcohol use disorder, substance use disorder, shorter lifespan, and much more, but in the US we only care about an issue when it is about to kill you and not prevent it to begin with.</p>
+<p>There are a multitude of limitations to this exploratory analysis with the biggest being low response rate which we know leads to increase in response bias. In addition, this analysis was simply by state prevalence and did not include any demographics of the participants (Table 2 of the article). Due to this, I will put a precautionary warning here that acknowledges for everyone that there is ample evidence that those who experience the most adverse childhood events are those living in low-income urban areas which often consists of majority people of color (Maguire-Jack et al., 2021).</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

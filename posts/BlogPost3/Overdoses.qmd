@@ -1,0 +1,480 @@
+---
+title: "Deaths from Overdoses"
+author: "Bryana A.S. Thieret"
+date: "2024-03-02"
+format: 
+  html: 
+    page-layout: full
+    messages: false
+    echo: false
+    warning: false
+    fig-align: center
+categories: [news]
+---
+
+
+
+
+```{r}
+library(readxl)
+library(tidyverse)
+library(gridExtra)
+library(here)
+
+library(readxl)
+
+od2 <- read_excel(here("posts/BlogPost3/overdose2.xlsx"), skip = 5)
+
+#od2 <- read_excel("overdose2.xlsx", skip = 5) 
+od2 = od2 |> slice(1:103) |> rename("Category" = ...1) |> mutate(gender = ifelse(
+  Category == "Female" | Category == "Male", Category, NA
+))
+
+totalsODs = od2 |> pivot_longer(c(2:25), names_to = "year", values_to = "deaths") |>
+  filter(is.na(gender)) |> 
+  select(-gender)
+
+list = c("Total Overdose Deaths", 
+  "Any Opioid1", 
+  "Prescription Opioids2",
+  "Prescription Opioids AND Synthetic Opioids other than Methadone",
+  "Prescription Opioids WITHOUT Synthetic Opioids other than Methadone",
+  "Synthetic Opioids other than Methadone (primarily fentanyl)3",
+  "Heroin4", 
+  "Heroin AND Synthetic Opioids other than Methadone",
+  "Heroin WITHOUT Synthetic Opioids other than Methadone",
+  "Stimulants5a", 
+  "Stimulants AND Any Opioid", 
+  "Stimulants WITHOUT Any Opioid",
+  "Stimulants AND Synthetic Opioids other than Methadone",
+  "Stimulants WITHOUT Synthetic Opioids other than Methadone",
+  "Cocaine5",
+  "Cocaine AND Any Opioid",
+  "Cocaine WITHOUT Any Opioid",
+  "Cocaine AND Synthetic Opioids other than Methadone",
+  "Cocaine WITHOUT Synthetic Opioids other than Methadone",
+  "Psychostimulants With Abuse Potential (primarily methamphetamine)6",
+  "Psychostimulants With Abuse Potential AND Any Opioid",
+  "Psychostimulants With Abuse Potential WITHOUT Any Opioid",
+  "Psychostimulants With Abuse Potential AND Synthetic Opioids other than           Methadone",
+  "Psychostimulants With Abuse Potential WITHOUT Synthetic Opioids other than Methadone",
+  "Benzodiazepines7",
+  "Benzodiazepines AND Any Opioid",
+  "Benzodiazepines WITHOUT Any Opioid",
+  "Benzodiazepines AND Synthetic Opioids other than Methadone",
+  "Benzodiazepines WITHOUT Synthetic Opioids other than Methadone",
+  "Antidepressants8",
+  "Antidepressants AND Any Opioid",
+  "Antidepressants WITHOUT Any Opioid",
+  "Antidepressants AND Synthetic Opioids other than Methadone",
+  "Antidepressants WITHOUT Synthetic Opioids other than Methadone"
+  )
+
+list = rep(list, each = 46)
+list = tibble(Category = list)
+
+
+odsGender = od2 |>  pivot_longer(c(2:25), names_to = "year", values_to = "deaths") |>
+  filter(!is.na(gender)) |> filter(gender == "Female" | gender == "Male") |> filter(year != "2015-2021 Fold Change") |> select(-Category)
+
+odsGender = tibble(list, odsGender)
+
+```
+
+
+## Death from Overdose in the United States by Year   
+
+
+```{r overall deaths from overdoses by sex}
+totalods = od2 |> slice(2:3) |>  pivot_longer(c(2:25), names_to = "year", values_to = "deaths") 
+
+totalods$year = as.numeric(totalods$year)
+totalods$Category = as.factor(totalods$Category)
+
+a = totalods |> ggplot(aes(x = year, y = deaths, col = Category)) + 
+  geom_point(size = 3) +
+  geom_line(linewidth = 1) +
+  theme_minimal() +
+  labs(y = "Deaths from Overdose in the US", x = "Year") +
+  scale_color_brewer(palette = "Pastel1")+
+  theme(
+    axis.title.y = element_text(color = "black", family = "Avenir", size = 20),
+    axis.title.x = element_blank(), 
+    axis.text.x = element_text(color = "black", size = 20, family = "Avenir"),
+    axis.text.y = element_text(color = "black", size = 18, family = "Avenir"),
+    legend.title = element_blank(),
+    legend.text = element_text(color = "black", family = "Avenir", size = 15),
+    legend.position = "top"
+  )
+```
+
+
+```{r overall deaths from overdoses by sex figure, fig.height=6, fig.width=12, fig.align='center'}
+grid.arrange(a)
+```
+
+
+
+### Death from Overdose by Substance Type    
+
+#### Opioids  
+
+* 
+
+
+
+```{r death from opioids}
+totalsODs$year = as.numeric(totalsODs$year)
+totalsODs$Category = as.factor(totalsODs$Category)
+
+b = totalsODs |> filter(Category == "Any Opioid1") |>
+  ggplot(aes(x = year, y = deaths)) + 
+  geom_point(size = 3) +
+  geom_line(linewidth = 1) +
+  theme_minimal() +
+  labs(y = "Overdose Deaths in the US", x = "Year") +
+  scale_color_brewer(palette = "Pastel1")+
+  theme(
+    axis.title.y = element_text(color = "black", family = "Avenir", size = 20),
+    axis.title.x = element_blank(), 
+    axis.text.x = element_text(color = "black", size = 20, family = "Avenir"),
+    axis.text.y = element_text(color = "black", size = 18, family = "Avenir"),
+    legend.title = element_blank(),
+    legend.text = element_text(color = "black", family = "Avenir", size = 15),
+    legend.position = "top"
+  )
+
+
+## gender differences:  
+odsGender$year = as.numeric(odsGender$year)
+odsGender$Category = as.factor(odsGender$Category)
+
+
+c = odsGender|> filter(
+                     Category == "Prescription Opioids2")  |>  
+  ggplot(aes(x = year, y = deaths, col = gender)) +
+    geom_point(size = 3) +
+  geom_line(linewidth = 1, aes(group = gender)) +
+  theme_minimal() +
+  labs(y = "Deaths from Overdose in the US", x = "Year", title = "Prescription Opioids", caption = "") +
+  scale_color_brewer(palette = "Pastel1") +
+  theme(
+    axis.title.y = element_text(color = "black", family = "Avenir", size = 20, hjust = 1.1),
+    axis.title.x = element_blank(), 
+    axis.text.x = element_text(color = "black", size = 20, family = "Avenir"),
+    axis.text.y = element_text(color = "black", size = 18, family = "Avenir"),
+    legend.title = element_blank(),
+    legend.text = element_text(color = "black", family = "Avenir", size = 15),
+    legend.position = c(0.8, 1.09),
+    legend.direction = "horizontal",
+    legend.box = "horizontal",
+    strip.text = element_text(color = "black", family = "Avenir", size = 15),
+    plot.title = element_text(color = "black", family = "Avenir", size = 20),
+    axis.line = element_line(color = "black"),
+    axis.ticks = element_line(color = "black"),
+    plot.caption = element_text(color = "black", size = 11, family = "Avenir")
+    
+  ) 
+
+
+d = odsGender|> filter(
+                     Category == "Prescription Opioids AND Synthetic Opioids other than Methadone")  |>  
+  ggplot(aes(x = year, y = deaths, col = gender)) +
+    geom_point(size = 3, show.legend = FALSE) +
+  geom_line(linewidth = 1, aes(group = gender), show.legend = FALSE) +
+  theme_minimal() +
+  labs(y = "Deaths from Overdose in the US", x = "Year", title = "Prescription and Synthetic Opioids", caption = "Data shown does not include methadone.") +
+  scale_color_brewer(palette = "Pastel1") +
+  theme(
+    axis.title.y = element_blank(),
+    axis.title.x = element_blank(), 
+    axis.text.x = element_text(color = "black", size = 20, family = "Avenir"),
+    axis.text.y = element_text(color = "black", size = 18, family = "Avenir"),
+    legend.title = element_blank(),
+    legend.text = element_text(color = "black", family = "Avenir", size = 15),
+    legend.position = c(0.8, 1.03),
+    legend.direction = "horizontal",
+    legend.box = "horizontal",
+    strip.text = element_text(color = "black", family = "Avenir", size = 15),
+    plot.title = element_text(color = "black", family = "Avenir", size = 20),
+    axis.line = element_line(color = "black"),
+    axis.ticks = element_line(color = "black"),
+    plot.caption = element_text(color = "black", size = 11, family = "Avenir")
+  ) 
+
+
+e = odsGender|> filter(
+                     Category == "Prescription Opioids WITHOUT Synthetic Opioids other than Methadone")  |>  
+  ggplot(aes(x = year, y = deaths, col = gender)) +
+    geom_point(size = 3, show.legend = FALSE) +
+  geom_line(linewidth = 1, aes(group = gender), show.legend = FALSE) +
+  theme_minimal() +
+  labs(y = " ", x = "Year", title = "Prescription Opioids without Synthetic Opioids", caption = "Data shown does not include methadone.") +
+  scale_color_brewer(palette = "Pastel1") +
+  theme(
+    axis.title.y = element_text(color = "black", family = "Avenir", size = 20),
+    axis.title.x = element_blank(), 
+    axis.text.x = element_text(color = "black", size = 20, family = "Avenir"),
+    axis.text.y = element_text(color = "black", size = 18, family = "Avenir"),
+    legend.title = element_blank(),
+    legend.text = element_text(color = "black", family = "Avenir", size = 15),
+    legend.position = c(0.8, 1.0),
+    legend.direction = "horizontal",
+    legend.box = "horizontal",
+    strip.text = element_text(color = "black", family = "Avenir", size = 15),
+    plot.title = element_text(color = "black", family = "Avenir", size = 20),
+    axis.line = element_line(color = "black"),
+    axis.ticks = element_line(color = "black"),
+    plot.caption = element_text(color = "black", size = 11, family = "Avenir")
+  ) 
+
+```
+
+
+```{r, fig.width=12, fig.height=6, fig.align='center'}
+grid.arrange(b)
+```
+
+
+
+```{r, fig.height=6, fig.width=12}
+grid.arrange(c, d, e, nrow = 2)
+```
+
+
+
+#### Opiates  
+
+*
+
+```{r}
+
+f = odsGender |> filter(Category == "Heroin4") |>
+  ggplot(aes(x = year, y = deaths, col = gender)) +
+    geom_point(size = 3) +
+  geom_line(linewidth = 1, aes(group = gender)) +
+  theme_minimal() +
+  labs(y = "Deaths from Overdose in the US", x = "Year", title = "Heroin", caption = "") +
+  scale_color_brewer(palette = "Pastel1") +
+  theme(
+    axis.title.y = element_text(color = "black", family = "Avenir", size = 20, hjust = 1.1),
+    axis.title.x = element_blank(), 
+    axis.text.x = element_text(color = "black", size = 20, family = "Avenir"),
+    axis.text.y = element_text(color = "black", size = 18, family = "Avenir"),
+    legend.title = element_blank(),
+    legend.text = element_text(color = "black", family = "Avenir", size = 15),
+    legend.position = c(0.8, 1.05),
+    legend.direction = "horizontal",
+    legend.box = "horizontal",
+    strip.text = element_text(color = "black", family = "Avenir", size = 15),
+    plot.title = element_text(color = "black", family = "Avenir", size = 20),
+    axis.line = element_line(color = "black"),
+    axis.ticks = element_line(color = "black"),
+    plot.caption = element_text(color = "black", size = 11, family = "Avenir")
+  ) 
+
+g = odsGender |> filter(Category == "Heroin WITHOUT Synthetic Opioids other than Methadone") |>
+  ggplot(aes(x = year, y = deaths, col = gender)) +
+    geom_point(size = 3) +
+  geom_line(linewidth = 1, aes(group = gender)) +
+  theme_minimal() +
+  labs(y = "Deaths from Overdose in the US", x = "Year", title = "Heroin without Synthetic Opioids", caption = "") +
+  scale_color_brewer(palette = "Pastel1") +
+  theme(
+    axis.title.y = element_text(color = "black", family = "Avenir", size = 20, hjust = 1.1),
+    axis.title.x = element_blank(), 
+    axis.text.x = element_text(color = "black", size = 20, family = "Avenir"),
+    axis.text.y = element_text(color = "black", size = 18, family = "Avenir"),
+    legend.title = element_blank(),
+    legend.text = element_text(color = "black", family = "Avenir", size = 15),
+    legend.position = c(0.8, 1.09),
+    legend.direction = "horizontal",
+    legend.box = "horizontal",
+    strip.text = element_text(color = "black", family = "Avenir", size = 15),
+    plot.title = element_text(color = "black", family = "Avenir", size = 20),
+    axis.line = element_line(color = "black"),
+    axis.ticks = element_line(color = "black"),
+    plot.caption = element_text(color = "black", size = 11, family = "Avenir")
+  )
+```
+
+
+```{r, fig.height=6, fig.width=12, fig.align='center'}
+grid.arrange(f, g, nrow = 1)
+```
+
+
+
+
+
+#### Benzodiazapine  
+
+
+
+
+
+
+#### Antidepressants  
+
+
+
+
+```{r}
+totalsODs |> filter(Category == "Antidepressants8") |>
+  ggplot(aes(x = year, y = deaths)) + 
+  geom_point(size = 3) +
+  geom_line(linewidth = 1) +
+  theme_minimal() +
+  labs(y = "Overdose Deaths in the US", x = "Year") +
+  scale_color_brewer(palette = "Pastel1")+
+  theme(
+    axis.title.y = element_text(color = "black", family = "Avenir", size = 20),
+    axis.title.x = element_blank(), 
+    axis.text.x = element_text(color = "black", size = 20, family = "Avenir"),
+    axis.text.y = element_text(color = "black", size = 18, family = "Avenir"),
+    legend.title = element_blank(),
+    legend.text = element_text(color = "black", family = "Avenir", size = 15),
+    legend.position = "top"
+  )
+
+
+
+
+odsGender|> filter(
+                     Category == "Antidepressants WITHOUT Any Opioid" |
+                       Category == "Antidepressants8" 
+                       ) |>
+  ggplot(aes(x = year, y = deaths, col = gender)) +
+    geom_point(size = 3) +
+  geom_line(linewidth = 1, aes(group = gender)) +
+  theme_minimal() +
+  labs(y = "Deaths from Overdose in the US", x = "Year") +
+  scale_color_brewer(palette = "Pastel1") +
+  theme(
+    axis.title.y = element_text(color = "black", family = "Avenir", size = 20),
+    axis.title.x = element_blank(), 
+    axis.text.x = element_text(color = "black", size = 20, family = "Avenir"),
+    axis.text.y = element_text(color = "black", size = 18, family = "Avenir"),
+    legend.title = element_blank(),
+    legend.text = element_text(color = "black", family = "Avenir", size = 15),
+    legend.position = "top",
+    strip.text = element_text(color = "black", family = "Avenir", size = 15)
+  ) +
+  facet_wrap(~Category)
+
+
+
+```
+
+
+
+### Death from Overdose by Polysubstance Use  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Categories:  
+
+Opioids:  
+
+
+* Any Opioid 
+* Select Opioid and synthetic opioids other than methadone  
+* Prescription opioids without synthetic opioids other than methadone  
+* Synthetic opioids other than methadone  
+* Heroin  
+* Heroin and synthetic opioids other than methadone  
+* Heroin without synthetic opioids other than methdone  
+* Stimulants  
+* Stimulants and any opioid  
+* Stimulants without any opioid  
+* Stimulants and Synthetic opioids other than methadone  
+* Stimulants without synthetic opioids other than methadone  
+* Cocaine  
+* Cocaine and any opioid  
+* Cocaine without any opioid  
+* Cocaine and synthetic opioids other than methadone  
+* Cocaine without synthetic opioids other than methadone  
+* Psychostimulants with abuse potential (primarily methamphetamine)  
+* Psychostimulants with abuse potential and any opioids  
+* Psychostimulants with abuse potential without opioids 
+* Psychostimulants with abuse potential and synthetic opioids other than methadone  
+* Psychostimulants with abuse potential without synthetic opiods other than methadone  
+* Benzodiazepines  
+* Benzodiazepines and any opioid  
+* Benzodiazepines without any opioid  
+* Benzodiazepines and synthetic opioids other than methadone  
+* Benzodiazepines without synthetic opioids other than methadone  
+* Antidepressants and any opioid  
+* Antidepressants without any opioid  
+* Antidepressants and synthetic opioids other than methadone  
+* Antidepressants without synthetic opioids other than methadone 
+
+
+
+Opioids: 
+* Select Opioid and synthetic opioids other than methadone  
+* Prescription opioids without synthetic opioids other than methadone  
+* Synthetic opioids other than methadone  
+
+
+
+
+
+
+
+
+
+
+
+Opiates:  
+* Heroin and synthetic opioids other than methadone  
+* Heroin without synthetic opioids other than methdone 
+
+Stimulants:  
+* Stimulants  
+* Cocaine  
+* Psychostimulants with abuse potential (primarily methamphetamine)  
+
+
+
+
+
+
+
+
+Polysubstance use: 
+
+Opiates and Opioids:  
+* Heroin and synthetic opioids other than methadone  
+* Heroin without synthetic opioids other than methdone  
+* Select Opioid and synthetic opioids other than methadone 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
