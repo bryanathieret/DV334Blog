@@ -9,7 +9,7 @@
 <meta name="author" content="Bryana A.S. Thieret">
 <meta name="dcterms.date" content="2024-03-02">
 
-<title>Bryana’s Blog - Deaths from Overdoses</title>
+<title>Bryana’s Blog - Deaths from Overdose in the United States between 1999 to 2021</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -121,7 +121,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Deaths from Overdoses</h1>
+<h1 class="title">Deaths from Overdose in the United States between 1999 to 2021</h1>
   <div class="quarto-categories">
     <div class="quarto-category">news</div>
   </div>
@@ -153,24 +153,107 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>Death from overdose of a substance, or multiple substances, is a sign of a much larger problem than substance abuse or misuse. If you don’t believe in the idea of free will, like myself, then that means that substance abuse occurs because of a persons reinforcement history, current environment, and their biological makeup (i.e., substance use is preventable and is a sign of societal inequities). Substance use when started, is extremely hard to extinguish because it is chemically/behaviorally addictive and relapse/resurgence is very common due to the established history of reinforcement with the substance (e.g., place can be a trigger for relapse, people can be a trigger for relapse, trauma can be a trigger for relapse, etc.,). This makes it especially difficult to treat and establish maintenance behavior for substance use.</p>
+<p>I am particularly interested in this data because we know those who have a history of adversity or adverse childhood events have an increased risk for early and life time substance use dependence compared to the general population (Kim et al., 2018; Shin et al., 2018; Strine et al., 2012; Pilowsky et al., 2009; Loudermilk et al., 2018; Dube et al., 2003; Gomez et al., 2018; Stein et al., 2017; Guarino et al., 2021; Sachs-Ericsson et al., 2017; Perez et al., 2016; Dube et al., 2001). That being said, not everyone who overdoses on a substance has a history of adversity, but it is more likely for those with a history of adverse childhood events to engage in substance use.</p>
+<section id="data" class="level3">
+<h3 class="anchored" data-anchor-id="data">Data</h3>
+<p>The data set used in this exploration was from the National Institute on Drug Abuse in the article named “Drug Overdose Death Rates” and can be found <a href="https://nida.nih.gov/research-topics/trends-statistics/overdose-death-rates">here</a> as a downloadable link in the article. The data set includes the number of deaths per year between 1999 through 2021 categorized by the type of substance(s) that caused the death. There were many categories but I ultimately decided to group these categories further by the substance medication class (i.e., opioids, opiates, narcotics, stimulants, etc.,). The exact grouping were as follows,</p>
+<ul>
+<li>Opioids: synthetically derived opiates.
+<ul>
+<li>Prescription opioids (<code>Prescription Opioids2</code>)<br>
+</li>
+<li>Prescription opioids other than methadone (<code>Prescription Opioids WITHOUT Synthetic Opioids other than Methadone</code>)<br>
+</li>
+<li>Synthetic opioids (<code>Synthetic Opioids other than Methadone (primarily fentanyl)3</code>)</li>
+</ul></li>
+<li>Opiates: compounds that are extracted or refined from natural plant matter (poppy sap and fibers).
+<ul>
+<li>Heroin (<code>Heroin4</code>)</li>
+</ul></li>
+<li>Narcotics: this includes both opiates and opioids.
+<ul>
+<li>Both opiates and opioids (<code>Any Opioid1</code>)<br>
+</li>
+<li>Prescription and synthetic opioids other than methadone (<code>Prescription Opioids AND Synthetic Opioids other than Methadone</code>)<br>
+</li>
+<li>Heroin and synthetic opioids other than methadone (<code>Heroin AND Synthetic Opioids other than Methadone</code>)<br>
+</li>
+<li>Heroin and methadone (<code>Heroin WITHOUT Synthetic Opioids other than Methadone</code>)</li>
+</ul></li>
+<li>Stimulants: this includes cocaine, psychostimulants, and psychostimulants with abuse potential.
+<ul>
+<li>Stimulants without any opioids present (<code>Stimulants WITHOUT Any Opioid</code>)<br>
+</li>
+<li>Stimulants without any synthetic opioids present (<code>Stimulants WITHOUT Synthetic Opioids other than Methadone</code>)<br>
+</li>
+<li>Cocaine without any opioid present (<code>Cocaine WITHOUT Any Opioid</code>)<br>
+</li>
+<li>Cocaine without any synthetic opioids present (<code>Cocaine WITHOUT Synthetic Opioids other than Methadone</code>)<br>
+</li>
+<li>Psychostimulants with abuse potential (<code>Psychostimulants With Abuse Potential (primarily methamphetamine)6</code>)<br>
+</li>
+<li>Psychostimulants with abuse potential without any opioid present (<code>Psychostimulants With Abuse Potential WITHOUT Any Opioid</code>)<br>
+</li>
+<li>Psychostimulants with abuse potential without any synthetic opioids present (<code>Psychostimulants With Abuse Potential WITHOUT Synthetic Opioids other than Methadone</code>)</li>
+</ul></li>
+<li>Benzodiazepine: depressants that produce sedation, relieve anxiety, reduces seizures, and are controlled substances because they are prone to misuse.
+<ul>
+<li>Benzodiazepine without any opioid present (<code>Benzodiazepines WITHOUT Any Opioid</code>)<br>
+</li>
+<li>Benzodiazepine without any synthetic opioid present other than methadone (<code>Benzodiazepines WITHOUT Synthetic Opioids other than Methadone</code>)</li>
+</ul></li>
+<li>Antidepressant: there are many types of antidepressants which include SSRIs, SNRIs, NASSAs, TCAs, SARIs, and MAOIs.
+<ul>
+<li>Antidepressants without any opioid present (<code>Antidepressants WITHOUT Any Opioid</code>)<br>
+</li>
+<li>Antidepressants without synthetic opioids present (<code>Antidepressants WITHOUT Synthetic Opioids other than Methadone</code>)</li>
+</ul></li>
+<li>Stimulants and Opioids:
+<ul>
+<li>Stimulants and any opioid present (<code>Stimulants AND Any Opioid</code>)<br>
+</li>
+<li>Cocaine and any opioid present (<code>Cocaine AND Any Opioid</code>)<br>
+</li>
+<li>Psychostimulants with abuse potential and any opioid present (<code>Psychostimulants With Abuse Potential AND Any Opioid</code>)</li>
+</ul></li>
+<li>Stimulants and Narcotics:
+<ul>
+<li>Stimulants and narcotics (<code>Stimulants AND Synthetic Opioids other than Methadone</code>)<br>
+</li>
+<li>Cocaine and narcotics (<code>Cocaine AND Synthetic Opioids other than Methadone</code>)<br>
+</li>
+<li>Psychostimulants with abuse potential and narcotics (<code>Psychostimulants With Abuse Potential AND Synthetic Opioids other than Methadone</code>)</li>
+</ul></li>
+<li>Benzodiazepine and Opioids:
+<ul>
+<li>Benzodiazepine and any opioid present (<code>Benzodiazepines AND Any Opioid</code>)</li>
+</ul></li>
+<li>Benzodiazepine and Narcotics:
+<ul>
+<li>Benzodiazepine and narcotics present (<code>Benzodiazepines AND Synthetic Opioids other than Methadone</code>)</li>
+</ul></li>
+<li>Antidepressant and Opioids:
+<ul>
+<li>Antidepressant and any opioid present (<code>Antidepressants AND Any Opioid</code>)</li>
+</ul></li>
+<li>Antidepressant and Narcotics:
+<ul>
+<li>Antidepressant and narcotics present (<code>Antidepressants AND Synthetic Opioids other than Methadone</code>)</li>
+</ul></li>
+</ul>
+</section>
+<section id="reasons-for-exploration" class="level3">
+<h3 class="anchored" data-anchor-id="reasons-for-exploration">Reasons for Exploration</h3>
+<p>If you go to the article where this data came from there is a relatively good write up with both tables, graphs, and interpretations but the way the author categorized the drugs did not, in my opinion, differentiate between opiates and opioids. Both opiates and opioids are highly addictive substances (primary reinforcers), but they neurochemically work differently within our nervous systems which is why it is important to not categorize the substances together as the same because they are indeed not the same. This exploration will dive into understanding if there are different trends over time for opiate vs opioid overdoses in addition to polysubstance use involving opioids and opiates. In addition, there is relatively building evidence of biological sex differences for substance addiction so in order to control for those potential differences we will be differentiating between the number of overdoses by sex for all categorizations.</p>
+</section>
+</section>
 <section id="death-from-overdose-in-the-united-states-by-year" class="level2">
 <h2 class="anchored" data-anchor-id="death-from-overdose-in-the-united-states-by-year">Death from Overdose in the United States by Year</h2>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="Overdoses_files/figure-html/overall deaths from overdoses by sex figure-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1152"></p>
-</figure>
-</div>
-</div>
-</div>
-<section id="death-from-overdose-by-substance-type" class="level3">
-<h3 class="anchored" data-anchor-id="death-from-overdose-by-substance-type">Death from Overdose by Substance Type</h3>
-<section id="opioids" class="level4">
-<h4 class="anchored" data-anchor-id="opioids">Opioids</h4>
-<ul>
-<li></li>
-</ul>
+<section id="opiates" class="level3">
+<h3 class="anchored" data-anchor-id="opiates">Opiates</h3>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -180,21 +263,27 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
+<ul>
+<li>Viewing at a global perspective, heroin overdoses are second derivative negative starting around 2016 showing both males and females to equally as effected (i.e., mirroring each other). On the other hand, prescription opiates look unstable in terms of the number of overdoses from 2020 to 2021 where males overdoses increased sharply and females overdosed on the substance significantly less. We know that supply and ultimately cost of a substance is going to effect whether a person takes a particular substance. This sudden decrease for overdoses for prescription opiates for females is most likely due to switching to another substance that has similar reinforcing value (i.e., the way it makes the person feel) but is more available/cheaper.</li>
+</ul>
+</section>
+<section id="opioids" class="level3">
+<h3 class="anchored" data-anchor-id="opioids">Opioids</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="Overdoses_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="1152"></p>
+<p><img src="Overdoses_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="1152"></p>
 </figure>
 </div>
 </div>
 </div>
-</section>
-<section id="opiates" class="level4">
-<h4 class="anchored" data-anchor-id="opiates">Opiates</h4>
 <ul>
-<li></li>
+<li>Prescription opioids appear to have been climbing in the number of overdoses since 1999 which is extremely concerning as a society. Fentanyl has become a more popular substance lately especially for overdoses because the concentration of the substance is much higher than any other opioid or opiate. Even though fentanyl has recently been causing the majority of overdoese in the recent years, it is not a new drug and has been around for decades as a pain medication often given as a shot or through IV.</li>
 </ul>
+</section>
+<section id="opiates-vs.-opioids" class="level3">
+<h3 class="anchored" data-anchor-id="opiates-vs.-opioids">Opiates vs.&nbsp;Opioids</h3>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -204,113 +293,75 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
-</section>
-<section id="benzodiazapine" class="level4">
-<h4 class="anchored" data-anchor-id="benzodiazapine">Benzodiazapine</h4>
-</section>
-<section id="antidepressants" class="level4">
-<h4 class="anchored" data-anchor-id="antidepressants">Antidepressants</h4>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Overdoses_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Overdoses_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section id="death-from-overdose-by-polysubstance-use" class="level3">
-<h3 class="anchored" data-anchor-id="death-from-overdose-by-polysubstance-use">Death from Overdose by Polysubstance Use</h3>
-<p>Categories:</p>
-<p>Opioids:</p>
 <ul>
-<li>Any Opioid</li>
-<li>Select Opioid and synthetic opioids other than methadone<br>
-</li>
-<li>Prescription opioids without synthetic opioids other than methadone<br>
-</li>
-<li>Synthetic opioids other than methadone<br>
-</li>
-<li>Heroin<br>
-</li>
-<li>Heroin and synthetic opioids other than methadone<br>
-</li>
-<li>Heroin without synthetic opioids other than methdone<br>
-</li>
-<li>Stimulants<br>
-</li>
-<li>Stimulants and any opioid<br>
-</li>
-<li>Stimulants without any opioid<br>
-</li>
-<li>Stimulants and Synthetic opioids other than methadone<br>
-</li>
-<li>Stimulants without synthetic opioids other than methadone<br>
-</li>
-<li>Cocaine<br>
-</li>
-<li>Cocaine and any opioid<br>
-</li>
-<li>Cocaine without any opioid<br>
-</li>
-<li>Cocaine and synthetic opioids other than methadone<br>
-</li>
-<li>Cocaine without synthetic opioids other than methadone<br>
-</li>
-<li>Psychostimulants with abuse potential (primarily methamphetamine)<br>
-</li>
-<li>Psychostimulants with abuse potential and any opioids<br>
-</li>
-<li>Psychostimulants with abuse potential without opioids</li>
-<li>Psychostimulants with abuse potential and synthetic opioids other than methadone<br>
-</li>
-<li>Psychostimulants with abuse potential without synthetic opiods other than methadone<br>
-</li>
-<li>Benzodiazepines<br>
-</li>
-<li>Benzodiazepines and any opioid<br>
-</li>
-<li>Benzodiazepines without any opioid<br>
-</li>
-<li>Benzodiazepines and synthetic opioids other than methadone<br>
-</li>
-<li>Benzodiazepines without synthetic opioids other than methadone<br>
-</li>
-<li>Antidepressants and any opioid<br>
-</li>
-<li>Antidepressants without any opioid<br>
-</li>
-<li>Antidepressants and synthetic opioids other than methadone<br>
-</li>
-<li>Antidepressants without synthetic opioids other than methadone</li>
+<li>This graph shows that overdoses from opiates has been decreasing as a rate, second derivative negative, since 2015 for both males and females. On the other hand there appears to be a shift to increased overdoses as a rate over years, second derivative positive, for both males and females which is concerning because the trend only appears to be continuing to increase, and predicatively, will continue to increase.</li>
 </ul>
-<p>Opioids: * Select Opioid and synthetic opioids other than methadone<br>
-* Prescription opioids without synthetic opioids other than methadone<br>
-* Synthetic opioids other than methadone</p>
-<p>Opiates:<br>
-* Heroin and synthetic opioids other than methadone<br>
-* Heroin without synthetic opioids other than methdone</p>
-<p>Stimulants:<br>
-* Stimulants<br>
-* Cocaine<br>
-* Psychostimulants with abuse potential (primarily methamphetamine)</p>
-<p>Polysubstance use:</p>
-<p>Opiates and Opioids:<br>
-* Heroin and synthetic opioids other than methadone<br>
-* Heroin without synthetic opioids other than methdone<br>
-* Select Opioid and synthetic opioids other than methadone</p>
-
-
 </section>
+</section>
+<section id="polysubstance-use" class="level2">
+<h2 class="anchored" data-anchor-id="polysubstance-use">Polysubstance Use</h2>
+<p>It is relatively common for multiple substances to be taken together which can be harder for a persons body to process leading to health complications (e.g., heart attack) but also can increase the risk of overdosing because substances can be laced with other substances that might create a biologically problematic interaction or too much of a particular substance. Since opiates and opioids have been lumped together in regards to polysubstance overdoses, I will show the number of overdoses for a substance without the presence of a narcotic and the same substance with the presence of a narcotic.</p>
+<section id="stimulants" class="level3">
+<h3 class="anchored" data-anchor-id="stimulants">Stimulants</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Overdoses_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>Interestingly, stimulants were not previously taken with narcotics between 1999 to 2012, but around 2013 for males and 2015 for females, stimulants and narcotics began to be mixed together causing overdoses. In a similar trend, both males and females in the past 4 years have been overdosing at higher rates when stimulants are mixed with narcotics compared to stimulants being taken alone.</li>
+</ul>
+</section>
+<section id="benzodiazepine" class="level3">
+<h3 class="anchored" data-anchor-id="benzodiazepine">Benzodiazepine</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Overdoses_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>This graph shows very obviously that those using both narcotics and benzodiazepine often results in some type of overdose death. Benzodiazepine can cause hallucinations which could impair a persons ability to make rational decisions, but also judgement of their perceived “highness” causing them to take too much of a narcotic leading to overdose.</li>
+</ul>
+</section>
+<section id="antidepressants" class="level3">
+<h3 class="anchored" data-anchor-id="antidepressants">Antidepressants</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Overdoses_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>From 2006 through 2021, there is a clear trend of females overdosing overall at a much higher rate compared to males generally speaking for both antidepressants alone and when antidepressants and narcotics are present. We can reasonably say those overdosing on antidepressants is a type of suicide, but it is hard to say if the antidepressant found in a toxicology report was their daily medication or if it was at a much higher dose along with either a opiate or opioid which would mean different things.</li>
+</ul>
+<hr>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Overdoses_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="1152"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="discussion" class="level2">
+<h2 class="anchored" data-anchor-id="discussion">Discussion</h2>
+<p>1,004,401 people have died between 1999 through 2021 to substance overdose. Over the past few years, substance overdose has increased exponentially. Outpatient centers are essential to help those with addictions pick up their life, but what is not often acknowledged is that those who have a history of substance addiction are prone to relapse, not because of their lack of self control, but because they have a history of reinforcement with the substance that will never go away. The way to treat substance addiction is to prevent it from occurring all together rather than as a society caring once it is way too late.</p>
+
+
 </section>
 
 </main> <!-- /main -->
