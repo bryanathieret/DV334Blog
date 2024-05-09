@@ -661,7 +661,7 @@ Something I noticed when doing this is that many of the states above the 75th pe
 In a sense, it does make sense that if a state had shown up once in a 75th percentile datasets that they would most likely show up again because instability leads to more instability. This visual, in my opinion, shows a real problem occurring within certain states. 
 
 
-```{r fig.height=12, fig.width=15}
+```{r fig.height=12, fig.width=15, }
 bad0 = full_join(full_join(full_join(full_join(full_join(full_join(full_join(emotional_top, sexual_top), physical_top), dv_top), mental_top), substance_top), incarcerated_top), separation_top) |> pivot_longer(c(2:9), values_to = "Percent", names_to = "Category") |> mutate(not0 = if_else(Percent != 0, 1, 0)) |> select(-Percent)
   
 bad = full_join(full_join(full_join(full_join(full_join(full_join(full_join(emotional_top, sexual_top), physical_top), dv_top), mental_top), substance_top), incarcerated_top), separation_top) |> pivot_longer(c(2:9), values_to = "Percent", names_to = "Category") |> mutate(not0 = if_else(Percent != 0, 1, 0)) |> filter(!is.na(not0)) |> group_by(state) |> summarise(sum = sum(not0)) |> mutate(state = fct_reorder(state, sum))
@@ -687,6 +687,38 @@ bad2 |> ggplot(aes(x = state, y = not0, fill = Category)) +
     legend.position = "top",
     plot.caption = element_text(color = "black", size = 10, family = "Avenir")
   )
+```
+
+
+```{r fig.height=12, fig.width=15}
+library(plotly)
+bad3 = left_join(bad2, ace1, by =c("state", "Category")) |> 
+  rename("Prevalence" = "sum.y", 
+         "sum" = "sum.x") |>
+  select(-sum0, -proportion)
+
+bad3 = bad3 |> mutate(state = fct_reorder(state, sum))
+
+bad3plot = bad3 |> ggplot(aes(x = state, y = not0, fill = Category, label = Prevalence)) + 
+  geom_col(color = "black") +
+  coord_flip() +
+  scale_fill_manual(limits = c("Incarcerated_HM", "Sexual", "DV", "Mental_Illness_HH", "Physical", "Substance_Use_HH", "SeparationDivorce", "Emotional"), values = c("#ebac23", "#b80058", "#008cf9", "#006e00", "#00bbad", "#d163e6", "#ff9287", "#5954d6")) +
+  theme_classic() +
+  labs(y = "Number of Categories", caption = "Each point represents a state. HH = household. HM = household member. DV = domestic violence.") +
+  theme(
+    axis.title.y = element_blank(),
+    axis.title.x = element_text(color = "black", size = 20, family = "Avenir"),
+    title = element_text(color = "black", size = 12, family = "Avenir"),
+    axis.text.x = element_text(color = "black", size = 19, family = "Avenir"), 
+    axis.text.y = element_text(color = "black", size = 19, family = "Avenir"),
+    legend.title = element_blank(),
+    legend.text = element_text(color = "black", size = 14, family = "Avenir"),
+    legend.position = "top",
+    plot.caption = element_text(color = "black", size = 10, family = "Avenir")
+  )
+
+ggplotly(bad3plot, tooltip = "label")
+
 ```
 
 
